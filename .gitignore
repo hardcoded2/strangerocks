@@ -10,6 +10,7 @@ Temp/
 Obj/
 UnityGenerated/
 Library/
+StrangeRocks/Library
  
 # ----[ Visual Studio / MonoDevelop generated ]------- #
  
@@ -54,8 +55,8 @@ TestResult*.xml
 !*.dll
 *.mdb
 *.mdb.meta
-Assets/UnityVS
-Assets/UnityVS.meta
+UnityVS
+UnityVS.meta
 UnitVS.Transfluent-Unity
 UnitTestResults.xml
 Assets/NGUI
