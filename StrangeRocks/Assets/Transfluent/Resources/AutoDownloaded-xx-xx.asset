@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7775ae55018724856ba88658385affd3, type: 3}
+  m_Name: AutoDownloaded-xx-xx
+  m_EditorClassIdentifier: 
+  allTranslations:
+  - groupid: 
+    translations:
+    - key: HELLO_WORLD_TEXT_KEY
+      value: 1262211,0elpmexe'd etxet el iciov
+    - key: UNITY_TEST_TRANSLATION_KEY
+      value: tset ed etxet nu tse icec
+    - key: TEST_CREATION_OF_A_KEY
+      value: rotide morf etaerc tset
+    - key: TEST_CREATION_OF_A_KEY2
+      value: detaerc osla saw siht
+    - key: TEST_TEXT
+      value: DLROW OLLEH
+    - key: THIS IS FROM THE EDITOR
+      value: ereht ih
+    - key: hello world
+      value: ffuts
+    - key: TEST_KEY_2
+      value: txet tset si siht
+    - key: 1
+      value: nU
+    - key: 2
+      value: __2__
+    - key: 3
+      value: siorT
+    - key: 4
+      value: 4
+    - key: cows
+      value: sehcav
+    - key: goat simulator
+      value: "erv\xE8hc ed ruetalumis"
+    - key: potions aquired
+      value: seunetbo snoitop
+    - key: options
+      value: snoitpo
+    - key: configuration
+      value: noitarugifnoc
+    - key: power up
+      value: pu rewop
+  - groupid: TEST
+    translations:
+    - key: sprechen sie deutsch
+      value: ?gniyas uoy era tahW
+    - key: manually edited key
+      value: I manually entered this
+  language:
+    name: Pseudo language
+    code: xx-xx
+    id: 500
