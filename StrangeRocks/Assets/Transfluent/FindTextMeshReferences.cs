@@ -20,6 +20,15 @@ public class FindTextMeshReferences : MonoBehaviour
 		return true;
 	}
 
+	[MenuItem("Helpers/All of the above")]
+	public static void UpdateReferences()
+	{
+		GetTextMeshReferencesFromPrefabs();
+		var scene = EditorApplication.currentScene.Replace("Assets/","");
+		Application.LoadLevel(scene);
+		GetTextMeshReferences();
+	}
+
 	//NOTE you *must* be in the source language for this to not cause corruption issues!
 	[MenuItem("Helpers/TestMesh In Current Scene")]
 	public static void GetTextMeshReferences()
@@ -29,6 +38,7 @@ public class FindTextMeshReferences : MonoBehaviour
 		{
 			setTextMesh(mesh);
 		}
+		AssetDatabase.SaveAssets();
 	}
 
 	private static void setTextMesh(TextMesh mesh)
@@ -59,7 +69,6 @@ public class FindTextMeshReferences : MonoBehaviour
 			var go = (GameObject) AssetDatabase.LoadAssetAtPath(assetPath, typeof (GameObject));
 
 			retList.Add(go);
-			// .. do whatever you like
 		}
 		return retList;
 	}
