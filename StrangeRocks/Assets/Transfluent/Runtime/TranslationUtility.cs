@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace transfluent
@@ -13,12 +15,21 @@ namespace transfluent
 
 		private TransfluentUtility()
 		{
-			changeStaticInstanceConfig(); //load default translation group info
+			Debug.Log("STARTING TRANSFLUENT UTILITY");
+			changeStaticInstanceConfigBasedOnTranslationConfigurationGroup(); //load default translation group info
 		}
 
 		public static TransfluentUtilityInstance getUtilityInstanceForDebugging()
 		{
 			return _instance;
+		}
+
+		public static void changeStaticInstanceConfigBasedOnTranslationConfigurationGroup(string group="")
+		{
+			var config = ResourceLoadFacade.LoadConfigGroup(group);
+			if(config == null) Debug.LogWarning("No default translation configuration found");
+
+			changeStaticInstanceConfig(config.sourceLanguage.code, group);
 		}
 
 		//convert into a factory?
@@ -27,11 +38,41 @@ namespace transfluent
 			TransfluentUtilityInstance tmpInstance = createNewInstance(destinationLanguageCode, translationGroup);
 			if(tmpInstance != null)
 			{
+				Debug.LogError("SUCCESS LOAD TO LOAD CONFIG " + destinationLanguageCode + " group:"+translationGroup);
 				_instance = tmpInstance;
+				
+				OnLanguageChanged();
+				
 				return true;
 			}
+			
 			return false;
 		}
+
+		[MenuItem("Helpers/Test Change to EN-US")]
+		public static void ChangeStaticConfigToUS()
+		{
+			changeStaticInstanceConfig("en-us");
+		}
+
+		[MenuItem("Helpers/Test Change to FR-FR")]
+		public static void ChangeStaticConfigToFRFR()
+		{
+			changeStaticInstanceConfig("fr-fr");
+		}
+
+		[MenuItem("Helpers/Test OnLocalize")]
+		public static void OnLanguageChanged()
+		{
+			GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+			for (int i=0;i<allObjects.Length;i++)
+			{
+				GameObject go = allObjects[i];
+				if (go.transform.parent != null) continue; //skip any non-root messages
+				go.BroadcastMessage("OnLocalize",options:SendMessageOptions.DontRequireReceiver);
+			}
+		}
+		//public static event Action OnLanguageChanged;
 
 		public static TransfluentUtilityInstance createNewInstance(string destinationLanguageCode = "", string group = "")
 		{
