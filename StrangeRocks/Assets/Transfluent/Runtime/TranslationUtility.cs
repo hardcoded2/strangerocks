@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace transfluent
 {
-	public class TransfluentUtility
+	public class TranslationUtility
 	{
 		//TODO: keep sets of language/group and allow for explict load/unload statements
 		//the implication of that is that any ongui/other client would need to declare set groups for their activiites in some way
-		private static TransfluentUtilityInstance _instance = new TransfluentUtilityInstance();
+		private static readonly TransfluentUtilityInstance _instance = createNewInstance();
 
 		private static LanguageList _LanguageList;
 
-		private TransfluentUtility()
+		private TranslationUtility()
 		{
 			changeStaticInstanceConfigBasedOnTranslationConfigurationGroup(); //load default translation group info
 		}
 
 		public static TransfluentUtilityInstance getUtilityInstanceForDebugging()
 		{
+			changeStaticInstanceConfigBasedOnTranslationConfigurationGroup();
 			return _instance;
 		}
 
@@ -34,14 +34,16 @@ namespace transfluent
 		//convert into a factory?
 		public static bool changeStaticInstanceConfig(string destinationLanguageCode = "", string translationGroup = "")
 		{
+			//Debug.LogError("LOADING STATIC CONFIG: "+ destinationLanguageCode + " translation group:"+translationGroup);
+
 			TransfluentUtilityInstance tmpInstance = createNewInstance(destinationLanguageCode, translationGroup);
 			if(tmpInstance != null)
 			{
 				Debug.LogError("SUCCESS LOAD TO LOAD CONFIG " + destinationLanguageCode + " group:"+translationGroup);
-				_instance = tmpInstance;
-				
-				OnLanguageChanged();
-				
+				_instance.setNewDestinationLanguage(tmpInstance.allKnownTranslations);
+				if(Application.isPlaying)
+					OnLanguageChanged();
+
 				return true;
 			}
 			
@@ -93,6 +95,16 @@ namespace transfluent
 			}
 
 			TransfluentLanguage dest = _LanguageList.getLangaugeByCode(destinationLanguageCode);
+			if (dest == null)
+			{
+				TranslationConfigurationSO defaultConfigInfo = ResourceLoadFacade.LoadConfigGroup(group);
+				string newDestinationLanguageCode = defaultConfigInfo.sourceLanguage.code;
+				Debug.Log("Could not load destination language code:" + destinationLanguageCode + " so falling back to source game language code:" + destinationLanguageCode);
+				destinationLanguageCode = newDestinationLanguageCode;
+				
+				dest = _LanguageList.getLangaugeByCode(destinationLanguageCode);
+				//dest = _LanguageList.getLangaugeByCode
+			}
 			GameTranslationSet destLangDB = GameTranslationGetter.GetTranslaitonSetFromLanguageCode(destinationLanguageCode);
 			Dictionary<string, string> keysInLanguageForGroupSpecified = destLangDB != null
 				? destLangDB.getGroup(group).getDictionaryCopy()
@@ -129,7 +141,8 @@ namespace transfluent
 
 		public void setNewDestinationLanguage(Dictionary<string, string> transaltionsInSet)
 		{
-			allKnownTranslations.Clear();
+			if(allKnownTranslations != null)
+				allKnownTranslations.Clear();
 			allKnownTranslations = transaltionsInSet;
 		}
 
