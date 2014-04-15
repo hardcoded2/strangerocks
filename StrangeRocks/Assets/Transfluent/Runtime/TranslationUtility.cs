@@ -15,7 +15,6 @@ namespace transfluent
 
 		private TransfluentUtility()
 		{
-			Debug.Log("STARTING TRANSFLUENT UTILITY");
 			changeStaticInstanceConfigBasedOnTranslationConfigurationGroup(); //load default translation group info
 		}
 
@@ -59,6 +58,12 @@ namespace transfluent
 		public static void ChangeStaticConfigToFRFR()
 		{
 			changeStaticInstanceConfig("fr-fr");
+		}
+
+		[MenuItem("Helpers/Test find")]
+		public static void testHelpfind()
+		{
+			//GetComponentsInChildren( typeof(Transform), true );
 		}
 
 		[MenuItem("Helpers/Test OnLocalize")]

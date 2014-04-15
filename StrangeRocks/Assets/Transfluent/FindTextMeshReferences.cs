@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using strange.examples.strangerocks;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +11,51 @@ public class FindTextMeshReferences : MonoBehaviour
 	{
 		"XXXX",
 	};
+	//something that returns a mesh[]
+	//TODO: reflection based solution?
+	private static List<TextMesh> toExplicitlyIgnore(GameObject inPrefab = null)
+	{
+		//ignore all textmeshes referenced by all ButtonView components
+		var listToIngore = new List<TextMesh>();
+
+		//custom references -- TODO: replace with a reflection based solution
+		//find gameobjects with [SerializeField] private or public vars and also define an OnLocalize
+
+		var allButtons = new List<ButtonView>();
+		if (inPrefab == null)
+		{
+			allButtons.AddRange(FindObjectsOfType<ButtonView>());
+		}
+		else
+		{
+			allButtons.AddRange(inPrefab.GetComponentsInChildren<ButtonView>(true));
+		}
+		allButtons.ForEach((ButtonView button) =>
+		{
+			if(button != null && button.labelMesh != null)
+				listToIngore.Add(button.labelMesh);
+		});
+
+		var allMeshesInSource = new List<TextMesh>();
+		if (inPrefab == null)
+		{
+			allMeshesInSource.AddRange(FindObjectsOfType<TextMesh>());
+		}
+		else
+		{
+			allMeshesInSource.AddRange(inPrefab.GetComponentsInChildren<TextMesh>(true));
+		}
+
+		foreach (TextMesh mesh in allMeshesInSource)
+		{
+			if(!shouldGlobalizeText(mesh.text))
+			{
+				listToIngore.Add(mesh);
+			}
+		}
+		return listToIngore;
+	}
+
 
 	private static bool shouldGlobalizeText(string textIn)
 	{
@@ -31,7 +78,7 @@ public class FindTextMeshReferences : MonoBehaviour
 
 	//NOTE you *must* be in the source language for this to not cause corruption issues!
 	[MenuItem("Helpers/TestMesh In Current Scene")]
-	public static void GetTextMeshReferences()
+	public static TextMesh[] GetTextMeshReferences()
 	{
 		var meshes = FindObjectsOfType(typeof (TextMesh)) as TextMesh[];
 		foreach (TextMesh mesh in meshes)
@@ -39,14 +86,42 @@ public class FindTextMeshReferences : MonoBehaviour
 			setTextMesh(mesh);
 		}
 		AssetDatabase.SaveAssets();
+		return meshes;
+	}
+
+	[MenuItem("Helpers/TestMesh In All Scene map")]
+	public static void GetTextMeshReferencesInScenes()
+	{
+		var scenePathToReferenceList = new Dictionary<string, TextMesh[]>();
+		
+		string[] sceneFiles = Directory.GetFiles(Application.dataPath, "*.unity", SearchOption.AllDirectories);
+		foreach (string scene in sceneFiles)
+		{
+			Debug.Log("Looking at scene file:" + scene);
+			EditorApplication.OpenScene(scene);
+			var textMeshes = GetTextMeshReferences();
+			scenePathToReferenceList.Add(scene,textMeshes);
+			
+			foreach (TextMesh mesh in textMeshes)
+			{
+				Debug.Log("Externally lookin at text mesh named:" + mesh.gameObject.name);
+			}
+		}
+		
 	}
 
 	private static void setTextMesh(TextMesh mesh)
 	{
-		if (!shouldGlobalizeText(mesh.text))
-			return; //TODO: possibly allow for XXXX to be transalted to a field in a formatted text field?
-
 		var translatable = mesh.GetComponent<GlobalizeTextMesh>();
+		if (!shouldGlobalizeText(mesh.text))
+		{
+			if (translatable != null)
+			{
+				DestroyImmediate(translatable);
+			}
+			return; //TODO: possibly allow for XXXX to be transalted to a field in a formatted text field?
+		}
+		
 		if (translatable == null)
 		{
 			translatable = mesh.gameObject.AddComponent<GlobalizeTextMesh>();
@@ -83,20 +158,21 @@ public class FindTextMeshReferences : MonoBehaviour
 
 		foreach (GameObject go in assets)
 		{
-			Debug.Log("looking at path:" + AssetDatabase.GetAssetPath(go));
+			//Debug.Log("looking at path:" + AssetDatabase.GetAssetPath(go));
 			if (go == null)
 				continue;
-			Debug.Log("looking at go:" + go.gameObject);
+			//Debug.Log("looking at go:" + go.gameObject);
 			TextMesh[] textMeshSubObjects = go.GetComponentsInChildren<TextMesh>(true);
 			if (textMeshSubObjects == null || textMeshSubObjects.Length == 0) continue;
 
 			Debug.Log("gameobject has meshes:" + go.gameObject);
-			foreach (TextMesh mesh in textMeshSubObjects)
+			foreach (TextMesh mesh in textMeshSubObjects)	
 			{
 				setTextMesh(mesh);
 			}
 
 			EditorUtility.SetDirty(go);
+			EditorApplication.SaveAssets();
 		}
 
 		/*
