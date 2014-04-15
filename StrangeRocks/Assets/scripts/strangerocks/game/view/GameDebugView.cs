@@ -13,7 +13,6 @@ using UnityEngine;
 
 namespace strange.examples.strangerocks.game
 {
-
 	public class GameDebugView : View
 	{
 		//An enum of states for this View's controls
@@ -62,26 +61,26 @@ namespace strange.examples.strangerocks.game
 					startGameSignal.Dispatch ();
 				}
 				GUI.TextField(screenUtil.GetScreenRect(0f, 0f, .4f, .05f), 
-					TransfluentUtility.getFormatted("Last Score: {0}", score));
+					TranslationUtility.getFormatted("Last Score: {0}", score));
 				break;
 			case ScreenState.START_LEVEL:
 				if (GUI.Button (screenUtil.GetScreenRect (.4f, .45f, .2f, .05f),
-					TransfluentUtility.getFormatted("Start Level {0}", level)))
+					TranslationUtility.getFormatted("Start Level {0}", level)))
 				{
 					startLevelSignal.Dispatch ();
 				}
-				GUI.TextField (screenUtil.GetScreenRect (.4f, .5f, .4f, .05f), TransfluentUtility.getFormatted("Score: {0}", score));
-				GUI.TextField (screenUtil.GetScreenRect (.4f, .55f, .4f, .05f), TransfluentUtility.getFormatted("Lives remaining: {0}", lives));
+				GUI.TextField (screenUtil.GetScreenRect (.4f, .5f, .4f, .05f), TranslationUtility.getFormatted("Score: {0}", score));
+				GUI.TextField (screenUtil.GetScreenRect (.4f, .55f, .4f, .05f), TranslationUtility.getFormatted("Lives remaining: {0}", lives));
 				break;
 			case ScreenState.END_GAME:
 				if (GUI.Button (screenUtil.GetScreenRect (.45f, .1f, .2f, .1f), "Play Again"))
 				{
 					startGameSignal.Dispatch ();
 				}
-				GUI.TextField (screenUtil.GetScreenRect (.45f, .2f, .4f, .05f), TransfluentUtility.getFormatted("Final Score: {0}", score));
+				GUI.TextField (screenUtil.GetScreenRect (.45f, .2f, .4f, .05f), TranslationUtility.getFormatted("Final Score: {0}", score));
 				break;
 			case ScreenState.LEVEL_IN_PROGRESS:
-				GUI.TextField (screenUtil.GetScreenRect (0f, 0f, .4f, .05f), TransfluentUtility.getFormatted("Score: {0}", score));
+				GUI.TextField (screenUtil.GetScreenRect (0f, 0f, .4f, .05f), TranslationUtility.getFormatted("Score: {0}", score));
 				GUI.TextField (screenUtil.GetScreenRect (.6f, 0f, .4f, .05f), "Lives Remaining: " + lives);
 				GUI.TextField (screenUtil.GetScreenRect (0f, .95f, .2f, .05f), "Level: " + level);
 				break;

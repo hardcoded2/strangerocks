@@ -18,6 +18,7 @@ namespace strange.examples.strangerocks
 	public class ButtonView : View
 	{
 		public GameObject background;
+		public LocalizeUtil labelData;
 		public string label;
 		public TextMesh labelMesh;
 
@@ -40,17 +41,30 @@ namespace strange.examples.strangerocks
 
 			bc.size = background.transform.localScale;
 
-			OnLocalize();
+			updateText();
+		}
+
+		void updateText()
+		{
+			if(labelMesh != null)
+			{
+				labelMesh.text = labelData.current;
+			}
 		}
 
 		public void OnLocalize()
 		{
-			if (labelMesh != null)
-			{
-				Debug.Log(string.Format("label {0} translation: {1}", label, TransfluentUtility.get(label)));
-				labelMesh.text = TransfluentUtility.get(label);
-			}
+			labelData.OnLocalize();
+			updateText();
 		}
+#if UNITY_EDITOR
+		public void OnValidate()
+		{
+			//OnLocalize(); //localize
+			//labelData.globalizationKey = labelMesh.text;
+			//labelData.globalizationKey = labelMesh.text;
+		}
+#endif
 
 		internal void pressBegan()
 		{
@@ -63,5 +77,6 @@ namespace strange.examples.strangerocks
 			releaseSignal.Dispatch();
 			background.renderer.material.color = normalColor;
 		}
+
 	}
 }

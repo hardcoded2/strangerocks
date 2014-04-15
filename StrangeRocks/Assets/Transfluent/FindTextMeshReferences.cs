@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using strange.examples.strangerocks;
+using transfluent;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,8 +33,23 @@ public class FindTextMeshReferences : MonoBehaviour
 		}
 		allButtons.ForEach((ButtonView button) =>
 		{
-			if(button != null && button.labelMesh != null)
+			if (button != null && button.labelMesh != null)
+			{
 				listToIngore.Add(button.labelMesh);
+				var newKey = button.label;
+				button.labelData.globalizationKey = newKey;
+				//TODO: ensure that this is set to the source language of the game config before adding
+				Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
+				var translationDictionary = TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
+				bool exists = translationDictionary.ContainsKey(newKey);
+				if (!exists)
+				{
+					translationDictionary.Add(newKey,newKey);
+				}
+				translationDictionary[newKey] = newKey;  //TODO: editor-safe set?
+				//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
+				EditorUtility.SetDirty(button);
+			}
 		});
 
 		var allMeshesInSource = new List<TextMesh>();
@@ -56,6 +72,11 @@ public class FindTextMeshReferences : MonoBehaviour
 		return listToIngore;
 	}
 
+	[MenuItem("Helpers/Test known key")]
+	public static void TestKnownKey()
+	{
+		Debug.Log( TranslationUtility.get("Start Game"));
+	}
 
 	private static bool shouldGlobalizeText(string textIn)
 	{
@@ -72,7 +93,7 @@ public class FindTextMeshReferences : MonoBehaviour
 	{
 		GetTextMeshReferencesFromPrefabs();
 		var scene = EditorApplication.currentScene.Replace("Assets/","");
-		Application.LoadLevel(scene);
+		EditorApplication.OpenScene(scene);
 		GetTextMeshReferences();
 	}
 
@@ -81,8 +102,11 @@ public class FindTextMeshReferences : MonoBehaviour
 	public static TextMesh[] GetTextMeshReferences()
 	{
 		var meshes = FindObjectsOfType(typeof (TextMesh)) as TextMesh[];
+		var blacklist = toExplicitlyIgnore();
 		foreach (TextMesh mesh in meshes)
 		{
+			if (blacklist.Contains(mesh)) continue;
+
 			setTextMesh(mesh);
 		}
 		AssetDatabase.SaveAssets();
@@ -107,31 +131,22 @@ public class FindTextMeshReferences : MonoBehaviour
 				Debug.Log("Externally lookin at text mesh named:" + mesh.gameObject.name);
 			}
 		}
-		
 	}
 
 	private static void setTextMesh(TextMesh mesh)
 	{
 		var translatable = mesh.GetComponent<GlobalizeTextMesh>();
-		if (!shouldGlobalizeText(mesh.text))
-		{
-			if (translatable != null)
-			{
-				DestroyImmediate(translatable);
-			}
-			return; //TODO: possibly allow for XXXX to be transalted to a field in a formatted text field?
-		}
 		
 		if (translatable == null)
 		{
 			translatable = mesh.gameObject.AddComponent<GlobalizeTextMesh>();
-			translatable.globalizationKey = mesh.text; //just use whatever the source text is upfront, and allow the user to 
+			translatable.textmesh = mesh; //just use whatever the source text is upfront, and allow the user to 
 		}
 
 		translatable.textmesh = mesh;
 
 		//should this be reversed?
-		translatable.stringValue = mesh.text; //?????????????????????????????????????
+		translatable.localizableText.globalizationKey = mesh.text;
 	}
 
 	public static List<GameObject> getAllPrefabReferences()
@@ -164,10 +179,11 @@ public class FindTextMeshReferences : MonoBehaviour
 			//Debug.Log("looking at go:" + go.gameObject);
 			TextMesh[] textMeshSubObjects = go.GetComponentsInChildren<TextMesh>(true);
 			if (textMeshSubObjects == null || textMeshSubObjects.Length == 0) continue;
-
+			var blacklisted = toExplicitlyIgnore(go);
 			Debug.Log("gameobject has meshes:" + go.gameObject);
-			foreach (TextMesh mesh in textMeshSubObjects)	
+			foreach (TextMesh mesh in textMeshSubObjects)
 			{
+				if(blacklisted.Contains(mesh)) continue;
 				setTextMesh(mesh);
 			}
 
@@ -175,29 +191,6 @@ public class FindTextMeshReferences : MonoBehaviour
 			EditorApplication.SaveAssets();
 		}
 
-		/*
-		
-		foreach (Object asset in assets)
-		{
-			GameObject go = asset as GameObject;
-			Debug.Log("looking at path:"+ AssetDatabase.GetAssetPath(go));
-			if (go == null)
-				continue;
-			Debug.Log("looking at go:" + go.gameObject);
-			TextMesh[] textMeshSubObjects = go.GetComponentsInChildren<TextMesh>(true);
-			if (textMeshSubObjects == null || textMeshSubObjects.Length == 0) continue;
-
-			Debug.Log("gameobject has meshes:"+go.gameObject);
-			foreach(TextMesh mesh in textMeshSubObjects)
-			{
-				setTextMesh(mesh);
-			}
-
-			EditorUtility.SetDirty(go);
-
-			//PrefabUtility.SetPropertyModifications(go,);
-		}
-		 */
 		AssetDatabase.SaveAssets();
 		//then go through instances?
 	}
