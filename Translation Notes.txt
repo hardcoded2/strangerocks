@@ -1,0 +1,26 @@
+strange rocks
+score: 
+
+
+reflection to find text that is supposed to be translatable? —attribute based or specified in a config file?  Too much?
+
+
+translatableTextMesh — could just move them all over
+
+
+
+
+So basic workflow is that TranslationUtility will send OnLoacalize — broadcast — not wonderful, but not sure how much worse it is than searching all things and then 
+
+
+All OnLocalize() get set
+globalizeTextMesh in scene files
+
+
+XXXX as ignored or SCORE: XXXX => “Score: {0}”
+
+
+TODO: upload all foreign translations(not just source) before requesting a translation
+
+retrieving translations — poll?  set a timer?
+
