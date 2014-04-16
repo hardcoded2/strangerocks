@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using strange.examples.strangerocks;
+using strange.examples.strangerocks.game;
 using transfluent;
 using UnityEditor;
 using UnityEngine;
@@ -15,16 +16,22 @@ public class FindTextMeshReferences : MonoBehaviour
 
 	static void addKeyFromCustomScriptObject(string key, string value)
 	{
-		Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
+		//Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
 		var translationDictionary = TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
+		var config = ResourceLoadFacade.LoadConfigGroup("");
+
+		var gameTranslationSet = GameTranslationGetter.GetTranslaitonSetFromLanguageCode(config.sourceLanguage.code);
+		
 		bool exists = translationDictionary.ContainsKey(key);
 		if(!exists)
 		{
 			translationDictionary.Add(key, key);
 		}
 		translationDictionary[key] = value;  //find a way to make sure the the SO gets set dirty?
+
+		gameTranslationSet.mergeInSet("", translationDictionary);
 		//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
-		
+
 	}
 	//something that returns a mesh[]
 	//TODO: reflection based solution?

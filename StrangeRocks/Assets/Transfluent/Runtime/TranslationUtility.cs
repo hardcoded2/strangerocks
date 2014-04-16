@@ -42,7 +42,6 @@ namespace transfluent
 			TransfluentUtilityInstance tmpInstance = createNewInstance(destinationLanguageCode, translationGroup);
 			if(tmpInstance != null)
 			{
-				Debug.LogError("SUCCESS LOAD TO LOAD CONFIG " + destinationLanguageCode + " group:"+translationGroup);
 				_instance.setNewDestinationLanguage(tmpInstance.allKnownTranslations);
 				if(Application.isPlaying)
 					OnLanguageChanged();
