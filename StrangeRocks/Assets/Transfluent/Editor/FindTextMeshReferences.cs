@@ -14,11 +14,11 @@ public class FindTextMeshReferences : MonoBehaviour
 		"XXXX",
 	};
 
-	static void addKeyFromCustomScriptObject(string key, string value)
+	static void setKeyInDefaultLanguageDB(string key, string value,string groupid = "")
 	{
 		//Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
 		var translationDictionary = TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
-		var config = ResourceLoadFacade.LoadConfigGroup("");
+		var config = ResourceLoadFacade.LoadConfigGroup(groupid);
 
 		var gameTranslationSet = GameTranslationGetter.GetTranslaitonSetFromLanguageCode(config.sourceLanguage.code);
 		
@@ -29,7 +29,7 @@ public class FindTextMeshReferences : MonoBehaviour
 		}
 		translationDictionary[key] = value;  //find a way to make sure the the SO gets set dirty?
 
-		gameTranslationSet.mergeInSet("", translationDictionary);
+		gameTranslationSet.mergeInSet(groupid, translationDictionary);
 		//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
 
 	}
@@ -60,7 +60,7 @@ public class FindTextMeshReferences : MonoBehaviour
 				var newKey = button.label;
 				button.labelData.globalizationKey = newKey;
 
-				addKeyFromCustomScriptObject(newKey,newKey);
+				setKeyInDefaultLanguageDB(newKey,newKey);
 
 				//TODO: ensure that this is set to the source language of the game config before adding
 				EditorUtility.SetDirty(button);
@@ -162,6 +162,7 @@ public class FindTextMeshReferences : MonoBehaviour
 
 		//should this be reversed?
 		translatable.localizableText.globalizationKey = mesh.text;
+		setKeyInDefaultLanguageDB(mesh.text, mesh.text);
 	}
 
 	public static List<GameObject> getAllPrefabReferences()
@@ -184,7 +185,7 @@ public class FindTextMeshReferences : MonoBehaviour
 		//var assets = AssetDatabase.LoadAllAssetsAtPath("Assets") as Object[];
 		List<GameObject> assets = getAllPrefabReferences();
 
-		Debug.Log("Assets:" + assets.Count);
+		//Debug.Log("Assets:" + assets.Count);
 
 		foreach (GameObject go in assets)
 		{
