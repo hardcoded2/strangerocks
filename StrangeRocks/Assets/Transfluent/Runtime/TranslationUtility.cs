@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Security.Permissions;
 using UnityEditor;
+#if UNITY_EDITOR
 using UnityEngine;
+#endif
 
 namespace transfluent
 {
@@ -80,7 +83,7 @@ namespace transfluent
 			}
 		}
 		//public static event Action OnLanguageChanged;
-
+		
 		public static TransfluentUtilityInstance createNewInstance(string destinationLanguageCode = "", string group = "")
 		{
 			if(_LanguageList == null)
@@ -109,6 +112,9 @@ namespace transfluent
 			Dictionary<string, string> keysInLanguageForGroupSpecified = destLangDB != null
 				? destLangDB.getGroup(group).getDictionaryCopy()
 				: new Dictionary<string, string>();
+#if UNITY_EDITOR
+			EditorUtility.SetDirty(destLangDB);
+#endif
 			return new TransfluentUtilityInstance
 			{
 				allKnownTranslations = keysInLanguageForGroupSpecified,

@@ -37,14 +37,7 @@ public class LocalizeUtil
 	public string globalizationKey;
 	//[SerializeField]
 	private string _current;
-	
-	/*
-	public LocalizeUtil(){}
-	public LocalizeUtil(string key)
-	{
-		globalizationKey = key;
-	}
-	*/
+
 	public string current
 	{
 		get
@@ -66,10 +59,7 @@ public class LocalizeUtil
 	{
 		return util.current;
 	}
-	/*public static implicit operator LocalizeUtil(string globalizationKey)
-	{
-		return new LocalizeUtil(globalizationKey);
-	}*/
+
 	public override string ToString()
 	{
 		return current;

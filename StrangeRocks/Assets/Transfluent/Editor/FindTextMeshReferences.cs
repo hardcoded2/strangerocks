@@ -12,6 +12,20 @@ public class FindTextMeshReferences : MonoBehaviour
 	{
 		"XXXX",
 	};
+
+	static void addKeyFromCustomScriptObject(string key, string value)
+	{
+		Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
+		var translationDictionary = TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
+		bool exists = translationDictionary.ContainsKey(key);
+		if(!exists)
+		{
+			translationDictionary.Add(key, key);
+		}
+		translationDictionary[key] = value;  //find a way to make sure the the SO gets set dirty?
+		//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
+		
+	}
 	//something that returns a mesh[]
 	//TODO: reflection based solution?
 	private static List<TextMesh> toExplicitlyIgnore(GameObject inPrefab = null)
@@ -38,16 +52,10 @@ public class FindTextMeshReferences : MonoBehaviour
 				listToIngore.Add(button.labelMesh);
 				var newKey = button.label;
 				button.labelData.globalizationKey = newKey;
+
+				addKeyFromCustomScriptObject(newKey,newKey);
+
 				//TODO: ensure that this is set to the source language of the game config before adding
-				Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
-				var translationDictionary = TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
-				bool exists = translationDictionary.ContainsKey(newKey);
-				if (!exists)
-				{
-					translationDictionary.Add(newKey,newKey);
-				}
-				translationDictionary[newKey] = newKey;  //TODO: editor-safe set?
-				//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
 				EditorUtility.SetDirty(button);
 			}
 		});
