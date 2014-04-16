@@ -10,7 +10,6 @@
 
 using strange.extensions.mediation.impl;
 using strange.extensions.signal.impl;
-using transfluent;
 using UnityEngine;
 
 namespace strange.examples.strangerocks
@@ -57,12 +56,11 @@ namespace strange.examples.strangerocks
 			labelData.OnLocalize();
 			updateText();
 		}
+
 #if UNITY_EDITOR
 		public void OnValidate()
 		{
-			//OnLocalize(); //localize
-			//labelData.globalizationKey = labelMesh.text;
-			//labelData.globalizationKey = labelMesh.text;
+			OnLocalize();
 		}
 #endif
 

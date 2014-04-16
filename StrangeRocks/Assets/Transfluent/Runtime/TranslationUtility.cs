@@ -101,6 +101,9 @@ namespace transfluent
 			{
 				TranslationConfigurationSO defaultConfigInfo = ResourceLoadFacade.LoadConfigGroup(group);
 				string newDestinationLanguageCode = defaultConfigInfo.sourceLanguage.code;
+				if(string.IsNullOrEmpty(destinationLanguageCode))
+					Debug.Log("Using default destination language code, as was given an empty language code");
+				else
 				Debug.Log("Could not load destination language code:" + destinationLanguageCode + " so falling back to source game language code:" + destinationLanguageCode);
 				destinationLanguageCode = newDestinationLanguageCode;
 				

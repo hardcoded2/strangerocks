@@ -10,6 +10,9 @@ namespace strange.examples.strangerocks.ui
 		[Inject]
 		public IScreenUtil screenUtil{ get; set; }
 
+		public ButtonView translationOptions;
+		public GameObject translationOptionsPanelParent;
+
 		public ButtonView startButton;
 		public TextMesh level_field;
 		public ScreenAnchor horizontalAnchor = ScreenAnchor.CENTER_HORIZONTAL;
@@ -20,10 +23,19 @@ namespace strange.examples.strangerocks.ui
 		internal void Init()
 		{
 			startButton.releaseSignal.AddListener (onStartClick);
+			translationOptions.releaseSignal.AddListener(onLanguageSelect);
 
 			transform.localPosition = screenUtil.GetAnchorPosition(horizontalAnchor, verticalAnchor);
 		}
 
+		void onLanguageSelect()
+		{
+			translationOptionsPanelParent.transform.localPosition = Vector3.zero;
+			translationOptionsPanelParent.SetActive(true);
+			
+			gameObject.SetActive(false);
+		}
+		
 		internal void SetLevel(int value)
 		{
 			level_field.text = value.ToString ();

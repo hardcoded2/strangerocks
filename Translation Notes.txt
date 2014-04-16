@@ -24,3 +24,7 @@ TODO: upload all foreign translations(not just source) before requesting a trans
 
 retrieving translations — poll?  set a timer?
 
+find a better way to do natural language mapping… without running into the problem of having to know the name of every language name in every other language 
+
+
+natural language names are important
