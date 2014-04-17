@@ -68,7 +68,7 @@ namespace transfluent
 		public static void testHelpfind()
 		{
 			//GetComponentsInChildren( typeof(Transform), true );
-			var gos = GameObject.FindSceneObjectsOfType(typeof (GameObject)) as GameObject[];
+			var gos = GameObject.FindObjectsOfType<GameObject>();
 			foreach (GameObject go in gos)
 			{
 				if (go.name == "idle_view")
