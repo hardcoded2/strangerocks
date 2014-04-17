@@ -47,8 +47,19 @@ namespace strange.examples.strangerocks
 		{
 			if(labelMesh != null)
 			{
-				labelMesh.text = labelData.current;
+				//we don't want to set the mesh unless we have to, so check to see if the raw text is the same
+				//more of an issue for more rendering heavy techniques
+				if (!labelMesh.text.Equals(labelData.current))
+				{
+					labelMesh.text = labelData.current;
+				}
 			}
+		}
+
+		public void OnEnable()
+		{
+			OnLocalize();
+			//updateText();
 		}
 
 		public void OnLocalize()
