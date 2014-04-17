@@ -150,11 +150,11 @@ public class FindTextMeshReferences : MonoBehaviour
 
 	private static void setTextMesh(TextMesh mesh)
 	{
-		var translatable = mesh.GetComponent<GlobalizeTextMesh>();
+		var translatable = mesh.GetComponent<LocalizedTextMesh>();
 		
 		if (translatable == null)
 		{
-			translatable = mesh.gameObject.AddComponent<GlobalizeTextMesh>();
+			translatable = mesh.gameObject.AddComponent<LocalizedTextMesh>();
 			translatable.textmesh = mesh; //just use whatever the source text is upfront, and allow the user to 
 		}
 

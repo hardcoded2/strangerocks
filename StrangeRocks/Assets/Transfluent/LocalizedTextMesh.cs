@@ -2,7 +2,7 @@
 using transfluent;
 using UnityEngine;
 
-public class GlobalizeTextMesh : MonoBehaviour
+public class LocalizedTextMesh : MonoBehaviour
 {
 	public bool textIsManagedExternally;  //if someone else is managing this
 
