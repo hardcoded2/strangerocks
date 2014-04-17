@@ -104,6 +104,13 @@ namespace transfluent
 				Debug.LogError("Could not load new language list");
 				return null;
 			}
+			bool enableCapture = false;
+#if UNITY_EDITOR
+			if (Application.isEditor)
+			{
+				enableCapture = getCaptureMode();
+			}
+#endif //UNTIY_EDITOR
 
 			TransfluentLanguage dest = _LanguageList.getLangaugeByCode(destinationLanguageCode);
 			if (dest == null)
@@ -126,12 +133,15 @@ namespace transfluent
 #if UNITY_EDITOR
 			EditorUtility.SetDirty(destLangDB);
 #endif
-			return new TransfluentUtilityInstance
+			var newTranslfuentUtilityInstance = new TransfluentUtilityInstance
 			{
 				allKnownTranslations = keysInLanguageForGroupSpecified,
 				destinationLanguage = dest,
-				groupBeingShown = group
+				groupBeingShown = group,
+				doCapture = enableCapture 
 			};
+
+			return newTranslfuentUtilityInstance;
 		}
 
 		public static string get(string sourceText)
@@ -145,6 +155,26 @@ namespace transfluent
 		{
 			return _instance.getFormattedTranslation(sourceText, formatStrings);
 		}
+		[MenuItem("Helpers/Enable Capture Mode")]
+		static void EnableCaptureMode()
+		{
+			setCaptureMode(true);
+		}
+
+		[MenuItem("Helpers/Disable Capture Mode")]
+		static void DisableCaptureMode()
+		{
+			setCaptureMode(false);
+		}
+
+		static bool getCaptureMode()
+		{
+			return EditorPrefs.GetBool("CAPTURE_MODE");
+		}
+		static void setCaptureMode(bool toCapture)
+		{
+			EditorPrefs.SetBool("CAPTURE_MODE",true);
+		}
 	}
 
 	//an interface for handling translaitons
@@ -155,6 +185,7 @@ namespace transfluent
 		public TransfluentLanguage destinationLanguage { get; set; }
 
 		public string groupBeingShown { get; set; }
+		public bool doCapture { get; set; }
 
 		public void setNewDestinationLanguage(Dictionary<string, string> transaltionsInSet)
 		{
@@ -172,10 +203,18 @@ namespace transfluent
 
 		public string getTranslation(string sourceText)
 		{
-			if(allKnownTranslations != null && allKnownTranslations.ContainsKey(sourceText))
+			if (allKnownTranslations != null)
 			{
-				return allKnownTranslations[sourceText];
+				if (allKnownTranslations.ContainsKey(sourceText))
+				{
+					return allKnownTranslations[sourceText];
+				}
+				if (doCapture)
+				{
+					allKnownTranslations.Add(sourceText, sourceText);
+				}
 			}
+			
 			return sourceText;
 		}
 	}
