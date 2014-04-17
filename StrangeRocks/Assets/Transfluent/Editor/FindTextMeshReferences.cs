@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using strange.examples.strangerocks;
-using strange.examples.strangerocks.game;
 using transfluent;
 using UnityEditor;
 using UnityEngine;
