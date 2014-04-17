@@ -12,25 +12,27 @@ public class FindTextMeshReferences : MonoBehaviour
 		"XXXX",
 	};
 
-	static void setKeyInDefaultLanguageDB(string key, string value,string groupid = "")
+	private static void setKeyInDefaultLanguageDB(string key, string value, string groupid = "")
 	{
 		//Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
-		var translationDictionary = TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
-		var config = ResourceLoadFacade.LoadConfigGroup(groupid);
+		Dictionary<string, string> translationDictionary =
+			TranslationUtility.getUtilityInstanceForDebugging().allKnownTranslations;
+		TranslationConfigurationSO config = ResourceLoadFacade.LoadConfigGroup(groupid);
 
-		var gameTranslationSet = GameTranslationGetter.GetTranslaitonSetFromLanguageCode(config.sourceLanguage.code);
-		
+		GameTranslationSet gameTranslationSet =
+			GameTranslationGetter.GetTranslaitonSetFromLanguageCode(config.sourceLanguage.code);
+
 		bool exists = translationDictionary.ContainsKey(key);
-		if(!exists)
+		if (!exists)
 		{
 			translationDictionary.Add(key, key);
 		}
-		translationDictionary[key] = value;  //find a way to make sure the the SO gets set dirty?
+		translationDictionary[key] = value; //find a way to make sure the the SO gets set dirty?
 
 		gameTranslationSet.mergeInSet(groupid, translationDictionary);
 		//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
-
 	}
+
 	//something that returns a mesh[]
 	//TODO: reflection based solution?
 	private static List<TextMesh> toExplicitlyIgnore(GameObject inPrefab = null)
@@ -55,10 +57,10 @@ public class FindTextMeshReferences : MonoBehaviour
 			if (button != null && button.labelMesh != null)
 			{
 				listToIngore.Add(button.labelMesh);
-				var newKey = button.label;
+				string newKey = button.label;
 				button.labelData.globalizationKey = newKey;
 
-				setKeyInDefaultLanguageDB(newKey,newKey);
+				setKeyInDefaultLanguageDB(newKey, newKey);
 
 				//TODO: ensure that this is set to the source language of the game config before adding
 				EditorUtility.SetDirty(button);
@@ -77,7 +79,7 @@ public class FindTextMeshReferences : MonoBehaviour
 
 		foreach (TextMesh mesh in allMeshesInSource)
 		{
-			if(!shouldGlobalizeText(mesh.text))
+			if (!shouldGlobalizeText(mesh.text))
 			{
 				listToIngore.Add(mesh);
 			}
@@ -88,7 +90,7 @@ public class FindTextMeshReferences : MonoBehaviour
 	[MenuItem("Helpers/Test known key")]
 	public static void TestKnownKey()
 	{
-		Debug.Log( TranslationUtility.get("Start Game"));
+		Debug.Log(TranslationUtility.get("Start Game"));
 	}
 
 	private static bool shouldGlobalizeText(string textIn)
@@ -105,7 +107,7 @@ public class FindTextMeshReferences : MonoBehaviour
 	public static void UpdateReferences()
 	{
 		GetTextMeshReferencesFromPrefabs();
-		var scene = EditorApplication.currentScene.Replace("Assets/","");
+		string scene = EditorApplication.currentScene.Replace("Assets/", "");
 		EditorApplication.OpenScene(scene);
 		GetTextMeshReferences();
 	}
@@ -115,7 +117,7 @@ public class FindTextMeshReferences : MonoBehaviour
 	public static TextMesh[] GetTextMeshReferences()
 	{
 		var meshes = FindObjectsOfType(typeof (TextMesh)) as TextMesh[];
-		var blacklist = toExplicitlyIgnore();
+		List<TextMesh> blacklist = toExplicitlyIgnore();
 		foreach (TextMesh mesh in meshes)
 		{
 			if (blacklist.Contains(mesh)) continue;
@@ -130,15 +132,15 @@ public class FindTextMeshReferences : MonoBehaviour
 	public static void GetTextMeshReferencesInScenes()
 	{
 		var scenePathToReferenceList = new Dictionary<string, TextMesh[]>();
-		
+
 		string[] sceneFiles = Directory.GetFiles(Application.dataPath, "*.unity", SearchOption.AllDirectories);
 		foreach (string scene in sceneFiles)
 		{
 			Debug.Log("Looking at scene file:" + scene);
 			EditorApplication.OpenScene(scene);
-			var textMeshes = GetTextMeshReferences();
-			scenePathToReferenceList.Add(scene,textMeshes);
-			
+			TextMesh[] textMeshes = GetTextMeshReferences();
+			scenePathToReferenceList.Add(scene, textMeshes);
+
 			foreach (TextMesh mesh in textMeshes)
 			{
 				Debug.Log("Externally lookin at text mesh named:" + mesh.gameObject.name);
@@ -149,7 +151,7 @@ public class FindTextMeshReferences : MonoBehaviour
 	private static void setTextMesh(TextMesh mesh)
 	{
 		var translatable = mesh.GetComponent<LocalizedTextMesh>();
-		
+
 		if (translatable == null)
 		{
 			translatable = mesh.gameObject.AddComponent<LocalizedTextMesh>();
@@ -193,11 +195,11 @@ public class FindTextMeshReferences : MonoBehaviour
 			//Debug.Log("looking at go:" + go.gameObject);
 			TextMesh[] textMeshSubObjects = go.GetComponentsInChildren<TextMesh>(true);
 			if (textMeshSubObjects == null || textMeshSubObjects.Length == 0) continue;
-			var blacklisted = toExplicitlyIgnore(go);
+			List<TextMesh> blacklisted = toExplicitlyIgnore(go);
 			Debug.Log("gameobject has meshes:" + go.gameObject);
 			foreach (TextMesh mesh in textMeshSubObjects)
 			{
-				if(blacklisted.Contains(mesh)) continue;
+				if (blacklisted.Contains(mesh)) continue;
 				setTextMesh(mesh);
 			}
 
