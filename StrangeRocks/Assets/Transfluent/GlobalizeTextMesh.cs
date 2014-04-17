@@ -16,7 +16,11 @@ public class GlobalizeTextMesh : MonoBehaviour
 		localizableText.OnLocalize();
 		textmesh.text = localizableText.current;
 	}
-	
+
+	public void OnEnable()
+	{
+		OnLocalize();  //TODO: only call this if the language has changed since last itration
+	}
 #if UNITY_EDITOR
 	public void OnValidate()
 	{
