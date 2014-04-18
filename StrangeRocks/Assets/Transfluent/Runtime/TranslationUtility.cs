@@ -181,6 +181,7 @@ namespace transfluent
 		{
 			setCaptureMode(false);
 			_instance = createNewInstance();
+
 		}
 
 		static bool getCaptureMode()
@@ -189,7 +190,7 @@ namespace transfluent
 		}
 		static void setCaptureMode(bool toCapture)
 		{
-			EditorPrefs.SetBool("CAPTURE_MODE",true);
+			EditorPrefs.SetBool("CAPTURE_MODE", toCapture);
 		}
 	}
 
