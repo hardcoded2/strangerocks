@@ -6,11 +6,6 @@ using UnityEngine;
 
 public class FindTextMeshReferences : MonoBehaviour
 {
-	private static readonly List<string> blacklistStringsContaining = new List<string>
-	{
-		"XXXX",
-	};
-
 	public static void setKeyInDefaultLanguageDB(string key, string value, string groupid = "")
 	{
 		//Debug.LogWarning("Make sure to set language to game source language before saving a new translation key");
@@ -22,7 +17,7 @@ public class FindTextMeshReferences : MonoBehaviour
 			GameTranslationGetter.GetTranslaitonSetFromLanguageCode(config.sourceLanguage.code);
 
 		bool exists = translationDictionary.ContainsKey(key);
-		if (!exists)
+		if(!exists)
 		{
 			translationDictionary.Add(key, key);
 		}
@@ -41,7 +36,7 @@ public class FindTextMeshReferences : MonoBehaviour
 		GameSpecificMigration.toExplicitlyIgnore(listToIngore, inPrefab);
 
 		var allMeshesInSource = new List<TextMesh>();
-		if (inPrefab == null)
+		if(inPrefab == null)
 		{
 			allMeshesInSource.AddRange(FindObjectsOfType<TextMesh>());
 		}
@@ -50,9 +45,9 @@ public class FindTextMeshReferences : MonoBehaviour
 			allMeshesInSource.AddRange(inPrefab.GetComponentsInChildren<TextMesh>(true));
 		}
 
-		foreach (TextMesh mesh in allMeshesInSource)
+		foreach(TextMesh mesh in allMeshesInSource)
 		{
-			if (!shouldGlobalizeText(mesh.text))
+			if(!shouldGlobalizeText(mesh.text))
 			{
 				listToIngore.Add(mesh);
 			}
@@ -60,7 +55,7 @@ public class FindTextMeshReferences : MonoBehaviour
 		return listToIngore;
 	}
 
-	[MenuItem("Helpers/Test known key")]
+	//[MenuItem("Transfluent/Helpers/Test known key")]
 	public static void TestKnownKey()
 	{
 		Debug.Log(TranslationUtility.get("Start Game"));
@@ -68,15 +63,15 @@ public class FindTextMeshReferences : MonoBehaviour
 
 	private static bool shouldGlobalizeText(string textIn)
 	{
-		foreach (string blacklist in blacklistStringsContaining)
+		foreach(string blacklist in GameSpecificMigration.blacklistStringsContaining)
 		{
-			if (textIn.Contains(blacklist))
+			if(textIn.Contains(blacklist))
 				return false;
 		}
 		return true;
 	}
 
-	[MenuItem("Helpers/All of the above")]
+	[MenuItem("Translation/Helpers/Full migration")]
 	public static void UpdateReferences()
 	{
 		GetTextMeshReferencesFromPrefabs();
@@ -86,14 +81,14 @@ public class FindTextMeshReferences : MonoBehaviour
 	}
 
 	//NOTE you *must* be in the source language for this to not cause corruption issues!
-	[MenuItem("Helpers/TestMesh In Current Scene")]
+	//[MenuItem("Transfluent/Helpers/TestMesh In Current Scene")]
 	public static TextMesh[] GetTextMeshReferences()
 	{
-		var meshes = FindObjectsOfType(typeof (TextMesh)) as TextMesh[];
+		var meshes = FindObjectsOfType(typeof(TextMesh)) as TextMesh[];
 		List<TextMesh> blacklist = toExplicitlyIgnore();
-		foreach (TextMesh mesh in meshes)
+		foreach(TextMesh mesh in meshes)
 		{
-			if (blacklist.Contains(mesh)) continue;
+			if(blacklist.Contains(mesh)) continue;
 
 			setTextMesh(mesh);
 		}
@@ -101,20 +96,20 @@ public class FindTextMeshReferences : MonoBehaviour
 		return meshes;
 	}
 
-	[MenuItem("Helpers/TestMesh In All Scene map")]
+	//[MenuItem("Transfluent/Helpers/TestMesh In All Scene map")]
 	public static void GetTextMeshReferencesInScenes()
 	{
 		var scenePathToReferenceList = new Dictionary<string, TextMesh[]>();
 
 		string[] sceneFiles = Directory.GetFiles(Application.dataPath, "*.unity", SearchOption.AllDirectories);
-		foreach (string scene in sceneFiles)
+		foreach(string scene in sceneFiles)
 		{
 			Debug.Log("Looking at scene file:" + scene);
 			EditorApplication.OpenScene(scene);
 			TextMesh[] textMeshes = GetTextMeshReferences();
 			scenePathToReferenceList.Add(scene, textMeshes);
 
-			foreach (TextMesh mesh in textMeshes)
+			foreach(TextMesh mesh in textMeshes)
 			{
 				Debug.Log("Externally lookin at text mesh named:" + mesh.gameObject.name);
 			}
@@ -125,10 +120,10 @@ public class FindTextMeshReferences : MonoBehaviour
 	{
 		var translatable = mesh.GetComponent<LocalizedTextMesh>();
 
-		if (translatable == null)
+		if(translatable == null)
 		{
 			translatable = mesh.gameObject.AddComponent<LocalizedTextMesh>();
-			translatable.textmesh = mesh; //just use whatever the source text is upfront, and allow the user to 
+			translatable.textmesh = mesh; //just use whatever the source text is upfront, and allow the user to
 		}
 
 		translatable.textmesh = mesh;
@@ -142,17 +137,17 @@ public class FindTextMeshReferences : MonoBehaviour
 	{
 		var retList = new List<GameObject>();
 		string[] aMaterialFiles = Directory.GetFiles(Application.dataPath, "*.prefab", SearchOption.AllDirectories);
-		foreach (string matFile in aMaterialFiles)
+		foreach(string matFile in aMaterialFiles)
 		{
 			string assetPath = "Assets" + matFile.Replace(Application.dataPath, "").Replace('\\', '/');
-			var go = (GameObject) AssetDatabase.LoadAssetAtPath(assetPath, typeof (GameObject));
+			var go = (GameObject)AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
 
 			retList.Add(go);
 		}
 		return retList;
 	}
 
-	[MenuItem("Helpers/Textmeshes in prefabs")]
+	//[MenuItem("Transfluent/Helpers/Textmeshes in prefabs")]
 	public static void GetTextMeshReferencesFromPrefabs()
 	{
 		//var assets = AssetDatabase.LoadAllAssetsAtPath("Assets") as Object[];
@@ -160,19 +155,19 @@ public class FindTextMeshReferences : MonoBehaviour
 
 		//Debug.Log("Assets:" + assets.Count);
 
-		foreach (GameObject go in assets)
+		foreach(GameObject go in assets)
 		{
 			//Debug.Log("looking at path:" + AssetDatabase.GetAssetPath(go));
-			if (go == null)
+			if(go == null)
 				continue;
 			//Debug.Log("looking at go:" + go.gameObject);
 			TextMesh[] textMeshSubObjects = go.GetComponentsInChildren<TextMesh>(true);
-			if (textMeshSubObjects == null || textMeshSubObjects.Length == 0) continue;
+			if(textMeshSubObjects == null || textMeshSubObjects.Length == 0) continue;
 			List<TextMesh> blacklisted = toExplicitlyIgnore(go);
 			Debug.Log("gameobject has meshes:" + go.gameObject);
-			foreach (TextMesh mesh in textMeshSubObjects)
+			foreach(TextMesh mesh in textMeshSubObjects)
 			{
-				if (blacklisted.Contains(mesh)) continue;
+				if(blacklisted.Contains(mesh)) continue;
 				setTextMesh(mesh);
 			}
 

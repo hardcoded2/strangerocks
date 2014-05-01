@@ -5,7 +5,8 @@ using transfluent;
 using UnityEngine;
 
 #if transfluent
-
+using GUI = transfluent.guiwrapper.GUI;
+using GUILayout = transfluent.guiwrapper.GUILayout;
 #else
 using GUI = UnityEngine.GUI;
 using GUILayout = UnityEngine.GUILayout;
@@ -21,7 +22,7 @@ public class InternationalTextDisplayWithTransfluent : MonoBehaviour
 	[SerializeField]
 	private string testText;
 
-	private ITransfluentUtilityInstance translationHelper;
+	private ITranslationUtilityInstance translationHelper;
 
 	// Use this for initialization
 	private void Start()
@@ -52,7 +53,6 @@ public class InternationalTextDisplayWithTransfluent : MonoBehaviour
 
 		foreach(TransfluentLanguage language in supportedLanguages)
 		{
-			//TODO: show groups available
 			if(GUILayout.Button(language.name))
 			{
 				TranslationUtility.changeStaticInstanceConfig(language.code);
@@ -75,7 +75,7 @@ public class InternationalTextDisplayWithTransfluent : MonoBehaviour
 			foreach(var translation in translationHelper.allKnownTranslations)
 			{
 				GUILayout.Label(string.Format("text id:{0} group id:{1} text:{2}", translation.Key,
-					((TransfluentUtilityInstance)translationHelper).groupBeingShown, translation.Value));
+					((TranslationUtilityInstance)translationHelper).groupBeingShown, translation.Value));
 			}
 		}
 		GUILayout.EndVertical();

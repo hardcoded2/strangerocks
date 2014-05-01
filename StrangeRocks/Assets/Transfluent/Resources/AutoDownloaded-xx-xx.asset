@@ -59,17 +59,17 @@ MonoBehaviour:
     - key: Hi there!
       value: "!\_ruojnoB"
     - key: Rocks
-      value: ' nesleF'
+      value: serreiP
     - key: STRANGE
-      value: "GIDR\xDCWKREM"
+      value: ERRAZIB
     - key: Prepare for level
-      value: ' netierebrov leveL fuA'
+      value: "uaevin el ruop suov-zerap\xE9rP"
     - key: 'Score:'
-      value: ' :dnatsetknuP'
+      value: ":\_erocS"
     - key: 'Level:'
       value: ': uaeviN'
     - key: Game Over!
-      value: '!revo emaG'
+      value: "!\_e\xE9nimret eitraP"
     - key: German
       value: dnamellA
     - key: French
@@ -94,6 +94,124 @@ MonoBehaviour:
       value: reuojeR
     - key: 'Final Score: {0}'
       value: '{0} : lanif erocS'
+    - key: 'Escape: [[[{0}]]]'
+      value: ']]]{0}[[[ :thculF'
+    - key: Yes
+      value: "\u662F"
+    - key: No
+      value: "\u5426"
+    - key: Yeah
+      value: "\u5BF9"
+    - key: Nope
+      value: "\u662F\u4E0D"
+    - key: Press Start
+      value: "\u201D\u59CB\u5F00\u201C\u4E0B\u6309"
+    - key: Press Start to continue
+      value: "\u7EED\u7EE7\u4EE5\u201D\u59CB\u5F00\u201C\u4E0B\u6309"
+    - key: Press any key
+      value: "\u952E\u6309\u610F\u4EFB\u4E0B\u6309"
+    - key: Press any key to continue
+      value: "\u7EED\u7EE7\u4EE5\u952E\u6309\u610F\u4EFB\u4E0B\u6309"
+    - key: New Game
+      value: "\u620F\u6E38\u65B0"
+    - key: Continue
+      value: "\u7EED\u7EE7"
+    - key: Continue?
+      value: "\uFF1F\u7EED\u7EE7"
+    - key: Load
+      value: "\u8F7D\u52A0"
+    - key: Load Game
+      value: "\u620F\u6E38\u8F7D\u52A0"
+    - key: Loading...
+      value: "...\u4E2D\u8F7D\u52A0"
+    - key: Please wait...
+      value: "...\u5F85\u7B49\u8BF7"
+    - key: Save
+      value: "\u5B58\u4FDD"
+    - key: Save Game
+      value: "\u620F\u6E38\u5B58\u4FDD"
+    - key: Saving...
+      value: "\u2026\u4E2D\u5B58\u4FDD"
+    - key: Exit
+      value: "\u51FA\u9000"
+    - key: Exit?
+      value: "\uFF1F\u51FA\u9000"
+    - key: Exit to Desktop
+      value: "\u9762\u684C\u5230\u51FA\u9000"
+    - key: Exit to Desktop?
+      value: "\uFF1F\u9762\u684C\u5230\u51FA\u9000"
+    - key: Quit
+      value: "\u5F03\u653E"
+    - key: Quit?
+      value: "?\u5F03\u653E"
+    - key: Pause
+      value: "\u505C\u6682"
+    - key: Are you sure you want to quit?
+      value: "\uFF1F\u5417\u51FA\u9000\u8981\u5B9A\u786E"
+    - key: Return
+      value: "\u56DE\u9000"
+    - key: Main Menu
+      value: "\u5355\u83DC\u4E3B"
+    - key: Return to Main Menu
+      value: "\u5355\u83DC\u4E3B\u5230\u56DE\u9000"
+    - key: Return to Main Menu?
+      value: "\uFF1F\u5355\u83DC\u4E3B\u5230\u56DE\u9000"
+    - key: Sound Options
+      value: "\u9879\u9009\u97F3\u58F0"
+    - key: Sound
+      value: "\u97F3\u58F0"
+    - key: Volume
+      value: "\u91CF\u97F3"
+    - key: Graphics Options
+      value: "\u9879\u9009\u50CF\u56FE"
+    - key: Video Options
+      value: "\u9879\u9009\u9891\u89C6"
+    - key: Quality
+      value: "\u91CF\u8D28"
+    - key: Gameplay Options
+      value: "\u9879\u9009\u620F\u6E38"
+    - key: Network Options
+      value: "\u9879\u9009\u7EDC\u7F51"
+    - key: Difficulty Options
+      value: "\u9879\u9009\u5EA6\u96BE"
+    - key: Difficulty
+      value: "\u5EA6\u96BE"
+    - key: Very Easy
+      value: "\u6613\u5BB9\u5E38\u975E"
+    - key: Easy
+      value: "\u6613\u5BB9"
+    - key: Medium
+      value: "\u7B49\u4E2D"
+    - key: Hard
+      value: "\u96BE\u56F0"
+    - key: Very Hard
+      value: "\u96BE\u56F0\u5E38\u975E"
+    - key: Insane
+      value: "\u96BE\u56F0\u5EA6\u6781"
+    - key: Impossible
+      value: "\u7EA7\u7070\u9AA8"
+    - key: Thank you!
+      value: "\uFF01\u8C22\u8C22"
+    - key: Goodbye!
+      value: "\uFF01\u89C1\u518D"
+    - key: Are you sure?
+      value: "\uFF1F\u5417\u5B9A\u786E"
+    - key: Single player
+      value: "\u620F\u6E38\u4EBA\u5355"
+    - key: Multiplayer
+      value: "\u620F\u6E38\u4EBA\u591A"
+    - key: Online Multiplayer
+      value: "\u620F\u6E38\u4EBA\u591A\u7EBF\u5728"
+    - key: Local Multiplayer
+      value: "\u620F\u6E38\u4EBA\u591A\u5730\u672C"
+    - key: Splitscreen
+      value: "\u5C4F\u5206"
+    - key: Co-op
+      value: "\u4F5C\u5408"
+    - key: Cooperative
+      value: "\u7684\u4F5C\u5408"
+    - key: Versus
+      value: "\u5BF9"
   - groupid: TEST
     translations:
     - key: sprechen sie deutsch

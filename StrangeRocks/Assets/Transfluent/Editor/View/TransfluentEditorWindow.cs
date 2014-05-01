@@ -18,10 +18,11 @@ namespace transfluent.editor
 			textGui = new TextsGUI(_mediator);
 		}
 
-		[MenuItem("Transfluent/View My Transfluent Account")]
+		[MenuItem("Translation/View My Transfluent Account")]
 		public static void Init()
 		{
-			GetWindow<TransfluentEditorWindow>();
+			var window = GetWindow<TransfluentEditorWindow>();
+			window.Show();
 		}
 
 		private void OnGUI()
@@ -51,15 +52,21 @@ namespace transfluent.editor
 			textGui.doGUI();
 		}
 
+		private bool showAllLanugages;
 		public bool showCurrentLanguage()
 		{
 			var languageList = _mediator.getLanguageList();
-			var languageNames = languageList.allLanguageNames();
+
+			showAllLanugages = EditorGUILayout.Toggle("Show all langauges, not just simplified list", showAllLanugages);
+			var languageNames = showAllLanugages ?
+						languageList.getListOfIdentifiersFromLanguageList() :
+						languageList.getSimplifiedListOfIdentifiersFromLanguageList();
 
 			TransfluentLanguage currentLanguage = _mediator.GetCurrentLanguage();
 			int currentLanguageIndex = -1;
 			if(currentLanguage != null)
 				currentLanguageIndex = languageNames.IndexOf(currentLanguage.name);
+			
 			int newLanguageIndex = EditorGUILayout.Popup("Current language", currentLanguageIndex, languageNames.ToArray());
 			if(currentLanguageIndex != newLanguageIndex)
 			{
@@ -93,15 +100,15 @@ namespace transfluent.editor
 			{
 				EditorGUILayout.BeginHorizontal();
 				currentUsername = EditorGUILayout.TextField("username", currentUsername);
-				currentPassword = EditorGUILayout.TextField("password", currentPassword);
+				currentPassword = EditorGUILayout.PasswordField("password", currentPassword);
 				EditorGUILayout.EndHorizontal();
 				EditorGUILayout.BeginHorizontal();
 
-				if(GUILayout.Button("save"))
-				{
-					_mediator.setUsernamePassword(currentUsername, currentPassword);
-				}
-				if(GUILayout.Button("authenticate"))
+				//if(GUILayout.Button("save"))
+				//{
+				//	_mediator.setUsernamePassword(currentUsername, currentPassword);
+				//}
+				if(GUILayout.Button("login"))
 				{
 					if(_mediator.doAuth(currentUsername, currentPassword))
 					{

@@ -13,6 +13,8 @@ public class SetupTranslationConfiguration : EditorWindow
 	private string groupidDisplayed = "";
 	private bool initialized;
 	private int newDestinationLanguageIndex;
+	private bool advancedOptions;
+	private bool showAllLanguages;
 
 	private TranslationConfigurationSO selectedConfig;
 	private string sourceLanguageCode;
@@ -22,10 +24,11 @@ public class SetupTranslationConfiguration : EditorWindow
 		_mediator = new TransfluentEditorWindowMediator();
 	}
 
-	[MenuItem("Transfluent/Game Configuration")]
+	[MenuItem("Translation/Game Configuration",false,100)]
 	public static void Init()
 	{
-		GetWindow<SetupTranslationConfiguration>();
+		var window = GetWindow<SetupTranslationConfiguration>();
+		window.Show();
 	}
 
 	private void Initialize()
@@ -37,6 +40,8 @@ public class SetupTranslationConfiguration : EditorWindow
 		initialized = true;
 	}
 
+	private Vector2 scrollwindowPos = Vector2.zero;
+
 	public void OnGUI()
 	{
 		//NOTE: potential fix for errors while trying to load or create resources while it reloads/compiles the unity editor
@@ -45,7 +50,12 @@ public class SetupTranslationConfiguration : EditorWindow
 			Initialize();
 			return;
 		}
-
+		scrollwindowPos = GUILayout.BeginScrollView(scrollwindowPos);
+		DrawContent();
+		GUILayout.EndScrollView();
+	}
+	public void DrawContent()
+	{
 		if(!GetLanguagesGUI())
 		{
 			return;
@@ -56,29 +66,55 @@ public class SetupTranslationConfiguration : EditorWindow
 			if(_allKnownConfigurations.Count == 0) return;
 		}
 
-		SelectAConfig();
-		createANewConfig();
+		advancedOptions = EditorGUILayout.Toggle("Advanced Options", advancedOptions);
+		if(advancedOptions)
+		{
+			showAllLanguages = EditorGUILayout.Toggle("Show all langauges, not just simplified list", showAllLanguages);
+			SelectAConfig();
+			createANewConfig();
+		}
+		else
+		{
+			selectedConfig = getOrCreateGameTranslationConfig("");
+		}
+
 		if(selectedConfig == null)
 		{
 			return;
 		}
 		DisplaySelectedTranslationConfiguration(selectedConfig);
 
+		GUILayout.Space(30);
+		GUILayout.Label("Account options:");
+
+		if(!userHasSetCredentials())
+		{
+			GUILayout.Label("Log in to translate your text as well as upload and download your local translations");
+			ShowLoginFields();
+			//return;
+		} else
+		{
+			if(GUILayout.Button("LOG OUT OF ACCOUNT"))
+			{
+				_mediator.setUsernamePassword("", "");
+			}
+		}
+		ShowUploadDownload();
+
 		DoTranslation();
 	}
 
 	private void DoTranslation()
 	{
-		//TODO: estimate all remaining text cost
+		//TODO: review estimation algorithm
 		GUILayout.Space(30);
-		GUILayout.Label("Translate all things:");
-		_mediator.doAuth();
-		string authToken = _mediator.getCurrentAuthToken();
-		if(string.IsNullOrEmpty(authToken))
-			throw new Exception("Auth token is null");
-		var estimator = new TranslationEstimate(authToken);
-		estimator.testThing(selectedConfig);
+		GUILayout.Label("Translate all known language from source to destination languages:");
+		
+		var estimator = new TranslationEstimate(_mediator);
+
+		estimator.presentEstimateAndMakeOrder(selectedConfig);
 	}
+
 
 	private void createANewConfig()
 	{
@@ -110,12 +146,15 @@ public class SetupTranslationConfiguration : EditorWindow
 
 	private void DisplaySelectedTranslationConfiguration(TranslationConfigurationSO so)
 	{
-		List<string> knownLanguageDisplayNames = _languages.getListOfIdentifiersFromLanguageList();
+		List<string> knownLanguageDisplayNames = showAllLanguages ? 
+			_languages.getListOfIdentifiersFromLanguageList() : 
+			_languages.getSimplifiedListOfIdentifiersFromLanguageList();
+
 		int sourceLanguageIndex = knownLanguageDisplayNames.IndexOf(so.sourceLanguage.name);
 
-		if (sourceLanguageIndex < 0) sourceLanguageIndex = 0;
-		EditorGUILayout.LabelField("group identifier:" + so.translation_set_group);
-		EditorGUILayout.LabelField("source language:" + so.sourceLanguage.name);
+		if(sourceLanguageIndex < 0) sourceLanguageIndex = 0;
+		EditorGUILayout.LabelField(string.Format("group identifier:{0}", so.translation_set_group));
+		EditorGUILayout.LabelField(string.Format("source language:{0}", so.sourceLanguage.name));
 
 		sourceLanguageIndex = EditorGUILayout.Popup(sourceLanguageIndex, knownLanguageDisplayNames.ToArray());
 		if(GUILayout.Button("SET Source to this language" + knownLanguageDisplayNames[sourceLanguageIndex]))
@@ -147,7 +186,7 @@ public class SetupTranslationConfiguration : EditorWindow
 
 		if(GUILayout.Button("Create a new Destination Language"))
 		{
-			TransfluentLanguage lang = _languages.languages[newDestinationLanguageIndex];
+			TransfluentLanguage lang = _languages.getLangaugeByName(knownLanguageDisplayNames[newDestinationLanguageIndex]);
 			if(so.sourceLanguage.id == lang.id)
 			{
 				EditorUtility.DisplayDialog("Error", "Cannot have the source language be the destination language", "OK", "");
@@ -156,7 +195,7 @@ public class SetupTranslationConfiguration : EditorWindow
 			foreach(TransfluentLanguage exists in so.destinationLanguages)
 			{
 				if(exists.id != lang.id) continue;
-				EditorUtility.DisplayDialog("Error", "You already have added this language", "OK", "");
+				EditorUtility.DisplayDialog("Error", "You already have added this language: " + lang.name, "OK", "");
 				return;
 			}
 
@@ -178,6 +217,49 @@ public class SetupTranslationConfiguration : EditorWindow
 		if(newIndex != currentIndex)
 		{
 			so.QualityToRequest = (OrderTranslation.TranslationQuality)newIndex + 1;
+		}
+	}
+
+	bool userHasSetCredentials()
+	{
+		KeyValuePair<string, string> usernamePassword = _mediator.getUserNamePassword();
+
+		return (!string.IsNullOrEmpty(usernamePassword.Key) && !string.IsNullOrEmpty(usernamePassword.Value));
+	}
+
+	private TransfluentEditorWindow.LoginGUI _loginGui;
+	void ShowLoginFields()
+	{
+		if(!userHasSetCredentials())
+		{
+			if(_loginGui == null)
+			{
+				_loginGui = new TransfluentEditorWindow.LoginGUI(_mediator);
+			}
+			_loginGui.doGUI();
+		}
+	}
+
+	private void ShowUploadDownload()
+	{
+		var so = selectedConfig;
+
+		GUILayout.Space(30);
+		if(GUILayout.Button("Upload all local text"))
+		{
+			var languageCodeList = new List<string> { so.sourceLanguage.code };
+			so.destinationLanguages.ForEach((TransfluentLanguage lang) => { languageCodeList.Add(lang.code); });
+
+			DownloadAllGameTranslations.uploadTranslationSet(languageCodeList, so.translation_set_group);
+		}
+		if(GUILayout.Button("Download all translations"))
+		{
+			if(EditorUtility.DisplayDialog("Downloading", "Downloading will overwrite any local changes to existing keys do you want to proceed?", "OK", "Cancel / Let me upload first"))
+			{
+				var languageCodeList = new List<string> { so.sourceLanguage.code };
+				so.destinationLanguages.ForEach((TransfluentLanguage lang) => { languageCodeList.Add(lang.code); });
+				DownloadAllGameTranslations.downloadTranslationSetsFromLanguageCodeList(languageCodeList, so.translation_set_group);
+			}
 		}
 	}
 

@@ -15,7 +15,7 @@ MonoBehaviour:
   - groupid: 
     translations:
     - key: HELLO_WORLD_TEXT_KEY
-      value: this is sample text0.1122621
+      value: this is sample text0.1136321
     - key: UNITY_TEST_TRANSLATION_KEY
       value: this is test text
     - key: 1
@@ -86,6 +86,278 @@ MonoBehaviour:
       value: Play Again
     - key: 'Final Score: {0}'
       value: 'Final Score: {0}'
+    - key: 'Escape: [[[{0}]]]'
+      value: 'Escape: [[[{0}]]]'
+    - key: this is a new key
+      value: this is a new key
+    - key: Yes
+      value: YES
+    - key: No
+      value: NO
+    - key: Yeah
+      value: Yeah
+    - key: Nope
+      value: Nope
+    - key: Press Start
+      value: Press Start
+    - key: Press Start to continue
+      value: Press Start to continue
+    - key: Press any key
+      value: Press any key
+    - key: Press any key to continue
+      value: Press any key to continue
+    - key: New Game
+      value: New Game
+    - key: Continue
+      value: Continue
+    - key: Continue?
+      value: Continue?
+    - key: Load
+      value: Load
+    - key: Load Game
+      value: Load Game
+    - key: Loading...
+      value: Loading...
+    - key: Please wait...
+      value: Please wait...
+    - key: Save
+      value: Save
+    - key: Save Game
+      value: Save Game
+    - key: Saving...
+      value: Saving...
+    - key: Exit
+      value: Exit
+    - key: Exit?
+      value: Exit?
+    - key: Exit to Desktop
+      value: Exit to Desktop
+    - key: Exit to Desktop?
+      value: Exit to Desktop?
+    - key: Quit
+      value: Quit
+    - key: Quit?
+      value: Quit?
+    - key: Pause
+      value: Pause
+    - key: Are you sure you want to quit?
+      value: Are you sure you want to quit?
+    - key: Return
+      value: Return
+    - key: Main Menu
+      value: Main Menu
+    - key: Return to Main Menu
+      value: Return to Main Menu
+    - key: Return to Main Menu?
+      value: Return to Main Menu?
+    - key: Sound Options
+      value: Sound Options
+    - key: Sound
+      value: Sound
+    - key: Volume
+      value: Volume
+    - key: Graphics Options
+      value: Graphics Options
+    - key: Video Options
+      value: Video Options
+    - key: Quality
+      value: Quality
+    - key: Gameplay Options
+      value: Gameplay Options
+    - key: Network Options
+      value: Network Options
+    - key: Difficulty Options
+      value: Difficulty Options
+    - key: Difficulty
+      value: Difficulty
+    - key: Very Easy
+      value: Very Easy
+    - key: Easy
+      value: Easy
+    - key: Medium
+      value: Medium
+    - key: Hard
+      value: Hard
+    - key: Very Hard
+      value: Very Hard
+    - key: Insane
+      value: Insane
+    - key: Impossible
+      value: Impossible
+    - key: Thank you!
+      value: Thank you!
+    - key: Goodbye!
+      value: Goodbye!
+    - key: Are you sure?
+      value: Are you sure?
+    - key: Single player
+      value: Single player
+    - key: Multiplayer
+      value: Multiplayer
+    - key: Online Multiplayer
+      value: Online Multiplayer
+    - key: Local Multiplayer
+      value: Local Multiplayer
+    - key: Splitscreen
+      value: Splitscreen
+    - key: Co-op
+      value: Co-op
+    - key: Cooperative
+      value: Cooperative
+    - key: Versus
+      value: Versus
+    - key: Backwards (test language)
+      value: Backwards (test language)
+    - key: going to play soon {0}
+      value: going to play soon {0}
+    - key: 'Username:'
+      value: 'Username:'
+    - key: 'Hello, {0} how are you doing today: {1}'
+      value: 'Hello, {0} how are you doing today: {1}'
+    - key: 'Translate to language: {0}'
+      value: 'Translate to language: {0}'
+    - key: YES
+      value: YES
+    - key: NO
+      value: NO
+    - key: Options
+      value: Options
+    - key: Deathmatch
+      value: Deathmatch
+    - key: You win!
+      value: You win!
+    - key: You lose!
+      value: You lose!
+    - key: You won!
+      value: You won!
+    - key: You lost!
+      value: You lost!
+    - key: Game over!
+      value: Game over!
+    - key: GAME OVER!
+      value: GAME OVER!
+    - key: Victory
+      value: Victory
+    - key: Defeat
+      value: Defeat
+    - key: You have been defeated.
+      value: You have been defeated.
+    - key: Objective
+      value: Objective
+    - key: Objectives
+      value: Objectives
+    - key: Mission Objective
+      value: Mission Objective
+    - key: Mission Objectives
+      value: Mission Objectives
+    - key: You are dead.
+      value: You are dead.
+    - key: You died.
+      value: You died.
+    - key: Death
+      value: Death
+    - key: Deaths
+      value: Deaths
+    - key: Kill
+      value: Kill
+    - key: Kills
+      value: Kills
+    - key: Assist
+      value: Assist
+    - key: Assists
+      value: Assists
+    - key: Respawn
+      value: Respawn
+    - key: Respawning
+      value: Respawning
+    - key: 'Respawn in:'
+      value: 'Respawn in:'
+    - key: Respawn?
+      value: Respawn?
+    - key: Locked
+      value: Locked
+    - key: Inventory
+      value: Inventory
+    - key: Inventory Capacity
+      value: Inventory Capacity
+    - key: Inventory Full
+      value: Inventory Full
+    - key: You cannot carry any more.
+      value: You cannot carry any more.
+    - key: Round
+      value: Round
+    - key: Match
+      value: Match
+    - key: Wins
+      value: Wins
+    - key: Losses
+      value: Losses
+    - key: Key
+      value: Key
+    - key: Lives
+      value: Lives
+    - key: Health
+      value: Health
+    - key: Ammunition
+      value: Ammunition
+    - key: Ammo
+      value: Ammo
+    - key: Bullet
+      value: Bullet
+    - key: Bullets
+      value: Bullets
+    - key: Armor
+      value: Armor
+    - key: Shield
+      value: Shield
+    - key: Shields
+      value: Shields
+    - key: Enemy
+      value: Enemy
+    - key: Enemies
+      value: Enemies
+    - key: Male
+      value: Male
+    - key: Female
+      value: Female
+    - key: Transgender
+      value: Transgender
+    - key: Man
+      value: Man
+    - key: Men
+      value: Men
+    - key: Woman
+      value: Woman
+    - key: Women
+      value: Women
+    - key: Dragon
+      value: Dragon
+    - key: Dragons
+      value: Dragons
+    - key: Zombie
+      value: Zombie
+    - key: Zombies
+      value: Zombies
+    - key: Time
+      value: Time
+    - key: Connection lost.
+      value: Connection lost.
+    - key: An error has occured.
+      value: An error has occured.
+    - key: Your opponent has disconnected.
+      value: Your opponent has disconnected.
+    - key: Your teammate has disconnected.
+      value: Your teammate has disconnected.
+    - key: The other player has disconnected.
+      value: The other player has disconnected.
+    - key: Cannot connect to server.
+      value: Cannot connect to server.
+    - key: 'Error code:'
+      value: 'Error code:'
+    - key: Save file corrupted.
+      value: Save file corrupted.
+    - key: No games found.
+      value: No games found.
   language:
     name: English (United States)
     code: en-us

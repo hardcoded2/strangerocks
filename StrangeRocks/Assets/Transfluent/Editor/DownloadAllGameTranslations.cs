@@ -6,13 +6,12 @@ using UnityEngine;
 
 namespace transfluent.editor
 {
-	//TODO: remove static funcitons
 	public class DownloadAllGameTranslations
 	{
 		// I don't know if I am going to expose this, but it is something to do
 		//maybe as sub-functionality on the scriptableobject?  push/pull on the object itself?
 
-		[MenuItem("Transfluent/Download All Transfluent data")]
+		[MenuItem("Translation/Download All Transfluent data")]
 		public static void doDownload()
 		{
 			TransfluentEditorWindowMediator mediator = getAuthenticatedMediator();
@@ -30,7 +29,7 @@ namespace transfluent.editor
 			{
 				EditorUtility.DisplayDialog("Login please",
 					"Please login using editor window before trying to use this functionality", "ok");
-				TransfluentEditorWindow.Init();
+				//TransfluentEditorWindow.Init();
 				return null;
 			}
 			mediator.doAuth(usernamePassword.Key, usernamePassword.Value);
@@ -42,7 +41,7 @@ namespace transfluent.editor
 			TransfluentEditorWindowMediator mediator = getAuthenticatedMediator();
 			if(mediator == null) return;
 
-			foreach (string languageCode in languageCodes)
+			foreach(string languageCode in languageCodes)
 			{
 				try
 				{
@@ -63,7 +62,7 @@ namespace transfluent.editor
 			TransfluentEditorWindowMediator mediator = getAuthenticatedMediator();
 			if(mediator == null) return;
 
-			foreach (string languageCode in languageCodes)
+			foreach(string languageCode in languageCodes)
 			{
 				try
 				{
@@ -79,7 +78,7 @@ namespace transfluent.editor
 
 						set.language = currentlanguage;
 						Dictionary<string, Dictionary<string, string>> groupToTranslationMap = groupidToDictionaryMap(translations);
-						foreach (var kvp in groupToTranslationMap)
+						foreach(var kvp in groupToTranslationMap)
 						{
 							Dictionary<string, string> dictionaryOfStrings = kvp.Value;
 							if(languageCode.Equals("xx-xx")) //backwards string
@@ -91,7 +90,7 @@ namespace transfluent.editor
 						AssetDatabase.SaveAssets();
 					}
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					Debug.LogError("error while downloading translations:" + e.Message + " stack:" + e.StackTrace);
 				}
@@ -101,7 +100,7 @@ namespace transfluent.editor
 		public static Dictionary<string, string> cleanBackwardsLanguageStringDictionary(Dictionary<string, string> dic)
 		{
 			var copy = new Dictionary<string, string>(dic);
-			foreach (var kvp in dic)
+			foreach(var kvp in dic)
 			{
 				copy[kvp.Key] = cleanBackwardsLanguageString(kvp.Value);
 			}
@@ -117,7 +116,7 @@ namespace transfluent.editor
 			return result;
 		}
 
-		[MenuItem("Transfluent/fixJumbed format string")]
+		//[MenuItem("Transfluent/fixJumbed format string")]
 		public static void TestRegex()
 		{
 			string jumbledThing = "hello }0{, how are you?";
@@ -128,7 +127,7 @@ namespace transfluent.editor
 			List<TransfluentTranslation> translations)
 		{
 			var map = new Dictionary<string, Dictionary<string, string>>();
-			foreach (TransfluentTranslation translation in translations)
+			foreach(TransfluentTranslation translation in translations)
 			{
 				string group = translation.group_id ?? "";
 				if(!map.ContainsKey(group))
