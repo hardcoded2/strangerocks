@@ -13,10 +13,7 @@ namespace transfluent
 {
 	public class GameSpecificMigration : MonoBehaviour
 	{
-		public static readonly List<string> blacklistStringsContaining = new List<string>
-		{
-			"XXXX",
-		};
+		
 		public interface IGameProcessor
 		{
 			void process(GameObject go, CustomScriptProcessorState processorState);
@@ -74,6 +71,11 @@ namespace transfluent
 				if(button == null) return;
 				if(button.labelMesh != null)
 				{
+					if(processorState.shouldIgnoreString(button.label))
+					{
+						processorState.addToBlacklist(go);
+						return;
+					}
 					string newKey = button.label;
 					button.labelData.globalizationKey = newKey;
 
@@ -99,9 +101,11 @@ namespace transfluent
 				processorState.addToBlacklist(go);
 				
 				var translatable = textMesh.GetComponent<LocalizedTextMesh>();
-
 				if(processorState.shouldIgnoreString(textMesh.text))
-					return; //ignore these explicitly
+				{
+					processorState.addToBlacklist(go);
+					return;
+				}
 
 				if(translatable == null)
 				{
