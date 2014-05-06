@@ -35,6 +35,8 @@ public class SetupTranslationConfiguration : EditorWindow
 	{
 		if(EditorApplication.isUpdating || EditorApplication.isCompiling)
 			return;
+		if(Event.current.type != EventType.Repaint)
+			return;
 		_languages = _mediator.getLanguageList();
 		_allKnownConfigurations = allKnownConfigurations();
 		initialized = true;
