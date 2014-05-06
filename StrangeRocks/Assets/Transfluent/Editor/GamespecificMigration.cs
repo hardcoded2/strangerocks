@@ -1,5 +1,5 @@
-﻿//#define TRANSFLUENT_EXAMPLE
-
+﻿#define TRANSFLUENT_EXAMPLE
+using System;
 #if TRANSFLUENT_EXAMPLE
 using strange.examples.strangerocks;
 #endif //!TRANSFLUENT_EXAMPLE
