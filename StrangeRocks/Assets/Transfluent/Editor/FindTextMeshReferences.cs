@@ -4,7 +4,7 @@ using transfluent;
 using UnityEditor;
 using UnityEngine;
 
-public class FindTextMeshReferences : MonoBehaviour
+public class FindTextMeshReferences 
 {
 	public static void setKeyInDefaultLanguageDB(string key, string value, string groupid = "")
 	{
@@ -38,7 +38,7 @@ public class FindTextMeshReferences : MonoBehaviour
 		var allMeshesInSource = new List<TextMesh>();
 		if(inPrefab == null)
 		{
-			allMeshesInSource.AddRange(FindObjectsOfType<TextMesh>());
+			allMeshesInSource.AddRange(GameObject.FindObjectsOfType<TextMesh>());
 		}
 		else
 		{
@@ -84,7 +84,7 @@ public class FindTextMeshReferences : MonoBehaviour
 	//[MenuItem("Transfluent/Helpers/TestMesh In Current Scene")]
 	public static TextMesh[] GetTextMeshReferences()
 	{
-		var meshes = FindObjectsOfType(typeof(TextMesh)) as TextMesh[];
+		var meshes = GameObject.FindObjectsOfType<TextMesh>();
 		List<TextMesh> blacklist = toExplicitlyIgnore();
 		foreach(TextMesh mesh in meshes)
 		{
