@@ -23,8 +23,8 @@ namespace transfluent
 			_gameProcessors.Add(new GameSpecificMigration.TextMeshProcessor());
 		}
 
-		[MenuItem("Translation/testScan")]
-		public static void testscan()
+		//[MenuItem("Translation/testScan")]
+		public static void fullMigration()
 		{
 			AssetScanner scanner = new AssetScanner();
 			/*var gos = scanner.getAllGameObjectsInScene();
@@ -62,7 +62,7 @@ namespace transfluent
 			string[] sceneFiles = Directory.GetFiles(Application.dataPath, "*.unity", SearchOption.AllDirectories);
 			foreach (string scene in sceneFiles)
 			{
-				Debug.LogError("Looking at scene file:" + scene);
+				//Debug.Log("Looking at scene file:" + scene);
 				EditorApplication.OpenScene(scene);
 
 				searchGameObjects(getAllGameObjectsInScene());
@@ -127,7 +127,7 @@ namespace transfluent
 						continue;
 					if(toIgnore.Contains(go))
 						continue;
-					Debug.Log("Looking at go:" + go.name);
+					//Debug.Log("Looking at go:" + go.name);
 
 					processor.process(go, _customProcessorState);
 				}
