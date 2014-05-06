@@ -1,4 +1,5 @@
 ﻿#define TRANSFLUENT_EXAMPLE
+using System;
 #if TRANSFLUENT_EXAMPLE
 using strange.examples.strangerocks;
 #endif //!TRANSFLUENT_EXAMPLE
@@ -24,11 +25,13 @@ namespace transfluent
 		{
 			private List<GameObject> _blackList;
 			private ITranslationUtilityInstance _translationDB;
+			private List<string> _stringsToIgnore;  
 
-			public CustomScriptProcessorState(List<GameObject> blackList, ITranslationUtilityInstance translationDb)
+			public CustomScriptProcessorState(List<GameObject> blackList, ITranslationUtilityInstance translationDb,List<string> stringsToIgnore )
 			{
 				_blackList = blackList;
 				_translationDB = translationDb;
+				_stringsToIgnore = stringsToIgnore;
 			}
 
 			public void addToBlacklist(GameObject go)
@@ -37,6 +40,11 @@ namespace transfluent
 				{
 					_blackList.Add(go);
 				}
+			}
+
+			public bool shouldIgnoreString(string input)
+			{
+				return _stringsToIgnore.Contains(input);
 			}
 
 			public void addToDB(string key, string value)
@@ -92,11 +100,15 @@ namespace transfluent
 				
 				var translatable = textMesh.GetComponent<LocalizedTextMesh>();
 
+				if(processorState.shouldIgnoreString(textMesh.text))
+					return; //ignore these explicitly
+
 				if(translatable == null)
 				{
 					translatable = textMesh.gameObject.AddComponent<LocalizedTextMesh>();
 					translatable.textmesh = textMesh; //just use whatever the source text is upfront, and allow the user to
 				}
+				
 				translatable.localizableText.globalizationKey = textMesh.text;
 				//For textmesh specificially, this setDirty is not needed according to http://docs.unity3d.com/Documentation/ScriptReference/EditorUtility.SetDirty.html
 				//EditorUtility.SetDirty(textMesh);
@@ -104,43 +116,5 @@ namespace transfluent
 
 		}
 		
-		//ignore all textmeshes referenced by all ButtonView components
-		public static void toExplicitlyIgnore(List<TextMesh> toIgnore, GameObject inPrefab = null)
-		{
-#if TRANSFLUENT_EXAMPLE
-			//or maybe just find this class with reflection?
-			//custom references -- replace with a reflection based solution maybe?
-			//   find gameobjects with [SerializeField] private or public vars and also define an OnLocalize
-
-			var allButtons = new List<ButtonView>();
-			if(inPrefab == null)
-			{
-				allButtons.AddRange(FindObjectsOfType<ButtonView>());
-			}
-			else
-			{
-				allButtons.AddRange(inPrefab.GetComponentsInChildren<ButtonView>(true));
-			}
-			allButtons.ForEach((ButtonView button) =>
-			{
-				if(button != null && button.labelMesh != null)
-				{
-					toIgnore.Add(button.labelMesh);
-					string newKey = button.label;
-					button.labelData.globalizationKey = newKey;
-
-					FindTextMeshReferences.setKeyInDefaultLanguageDB(newKey, newKey);
-
-					//TODO: ensure that this is set to the source language of the game config before adding
-					EditorUtility.SetDirty(button);
-				}
-			});
-#endif //!TRANSFLUENT_EXAMPLE
-		}
-
-		public static void toExplicitlyIgnore(List<GUIText> toIgnore, GameObject inPrefab = null)
-		{
-
-		}
 	}
 }

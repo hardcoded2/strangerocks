@@ -27,34 +27,6 @@ public class FindTextMeshReferences
 		//EditorUtility.SetnDirty(TransfluentUtility.getUtilityInstanceForDebugging());
 	}
 
-	//something that returns a mesh[]
-	//TODO: reflection based solution?
-	private static List<TextMesh> toExplicitlyIgnore(GameObject inPrefab = null)
-	{
-		//ignore all textmeshes referenced by all ButtonView components
-		var listToIngore = new List<TextMesh>();
-		GameSpecificMigration.toExplicitlyIgnore(listToIngore, inPrefab);
-
-		var allMeshesInSource = new List<TextMesh>();
-		if(inPrefab == null)
-		{
-			allMeshesInSource.AddRange(GameObject.FindObjectsOfType<TextMesh>());
-		}
-		else
-		{
-			allMeshesInSource.AddRange(inPrefab.GetComponentsInChildren<TextMesh>(true));
-		}
-
-		foreach(TextMesh mesh in allMeshesInSource)
-		{
-			if(!shouldGlobalizeText(mesh.text))
-			{
-				listToIngore.Add(mesh);
-			}
-		}
-		return listToIngore;
-	}
-
 	//[MenuItem("Transfluent/Helpers/Test known key")]
 	public static void TestKnownKey()
 	{

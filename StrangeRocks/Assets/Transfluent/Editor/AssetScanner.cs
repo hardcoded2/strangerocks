@@ -16,7 +16,9 @@ namespace transfluent
 		private readonly GameSpecificMigration.CustomScriptProcessorState _customProcessorState;
 		public AssetScanner()
 		{
-			_customProcessorState = new GameSpecificMigration.CustomScriptProcessorState(toIgnore, TranslationUtility.getUtilityInstanceForDebugging());
+			var stringFormatToIgnore = new List<string>() {"XXXX"};
+
+			_customProcessorState = new GameSpecificMigration.CustomScriptProcessorState(toIgnore, TranslationUtility.getUtilityInstanceForDebugging(), stringFormatToIgnore);
 			_gameProcessors.Add(new GameSpecificMigration.ButtonViewProcessor());
 			_gameProcessors.Add(new GameSpecificMigration.TextMeshProcessor());
 		}
