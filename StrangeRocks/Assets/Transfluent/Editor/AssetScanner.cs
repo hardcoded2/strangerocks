@@ -30,7 +30,7 @@ namespace transfluent
 
 			scanner.searchScenes();
 
-			//scanner.searchPrefabs();
+			scanner.searchPrefabs();
 		}
 
 		private readonly List<GameSpecificMigration.IGameProcessor> _gameProcessors =
@@ -66,7 +66,7 @@ namespace transfluent
 
 				searchGameObjects(getAllGameObjectsInScene());
 
-				EditorApplication.SaveScene(scene);
+				EditorApplication.SaveScene();
 
 				AssetDatabase.SaveAssets();
 			}
