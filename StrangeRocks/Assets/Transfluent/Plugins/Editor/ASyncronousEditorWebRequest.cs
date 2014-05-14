@@ -120,10 +120,12 @@ namespace transfluent.editor
 
 		private IEnumerator routineHandle;
 
-		public AsyncTester()
+		public AsyncTester()//Func<bool> isDone
 		{
 			counter = staticCounter++;
 			sw = new Stopwatch();
+			sw.Start();
+
 			routineHandle = testRoutine();
 			EditorApplication.update += doCoroutine;
 		}
@@ -137,8 +139,6 @@ namespace transfluent.editor
 		public static void testMe()
 		{
 			new AsyncTester();
-			//new AsyncTester();
-			//new AsyncTester();
 		}
 
 		public IEnumerator testRoutine()
@@ -146,10 +146,12 @@ namespace transfluent.editor
 			int maxticks = 100;
 			Debug.Log(counter + "MAXticks:" + maxticks);
 			//while(maxticks >0)
+
+			yield return new WaitForSeconds(5f);
 			while(sw.Elapsed < maxTime)
 			{
 				maxticks--;
-				//UnityEngine.Debug.Log("MAXticks:" + maxticks + " time:" + sw.Elapsed);
+				UnityEngine.Debug.Log("MAXticks:" + maxticks + " time:" + sw.Elapsed);
 				yield return null;
 			}
 			Debug.LogWarning(counter + "TOTLAL TIME:" + sw.Elapsed);
@@ -176,6 +178,88 @@ namespace transfluent.editor
 			else
 			{
 				EditorApplication.update = doCoroutine;
+			}
+		}
+	}
+
+	[ExecuteInEditMode]
+	public class EditorWWWWaitUntil
+	{
+		private WWW _www;
+		private Action<WebServiceReturnStatus> _callback;
+		private WWWFacade _getMyWwwFacade = new WWWFacade();
+		private Stopwatch _sw = new Stopwatch();
+		private ITransfluentParameters _callParams;
+
+		public EditorWWWWaitUntil(ITransfluentParameters callParams, Action<WebServiceReturnStatus> callback)
+		{
+			_sw.Start();
+			_callParams = callParams;
+
+			_getMyWwwFacade = new WWWFacade();
+			//string url = _getMyWwwFacade.encodeGETParams(callParams.getParameters);
+			_www = _getMyWwwFacade.request(callParams);
+
+			_callback = callback;
+			new EditorWaitUntil(() =>
+			{ return _www.error != null || _www.isDone; },
+				internalCallback
+			);
+		}
+
+		private void internalCallback()
+		{
+			if(_callback != null)
+			{
+				_callback(_getMyWwwFacade.getStatusFromFinishedWWW(_www, _sw, _callParams));
+			}
+		}
+
+		private WWW getStatus()
+		{
+			return _www;
+		}
+	}
+
+
+	[ExecuteInEditMode]
+	public class EditorWaitUntil
+	{
+		private IEnumerator routineHandle;
+		private Func<bool> _isDone;
+		private Action _onFinished;
+
+		public EditorWaitUntil(Func<bool> isDone, Action onFinished)
+		{
+			_isDone = isDone;
+			_onFinished = onFinished;
+
+			EditorApplication.update += doCoroutine;
+		}
+
+		//[MenuItem("asink/test waituntil")]
+		public static void testMe()
+		{
+			Stopwatch sw = new Stopwatch();
+			sw.Start();
+
+			new EditorWaitUntil(() => { return sw.Elapsed.Seconds > 15; }, () => { Debug.Log("Editor thing finished"); });
+		}
+
+		//TODO: can I run multiple of these
+		private void doCoroutine()
+		{
+			if(_isDone() == false)
+			{
+				EditorApplication.update = doCoroutine;
+			}
+			else
+			{
+				EditorApplication.update = null;
+				if(_onFinished != null)
+				{
+					_onFinished();
+				}
 			}
 		}
 	}

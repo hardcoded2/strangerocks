@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public interface IRoutineRunner
 {
 	void runRoutine(IEnumerator routineToRun);
 }
 
+[ExecuteInEditMode]
 public class RoutineRunner : IRoutineRunner
 {
 	private readonly RunnerMonobehaviour runner;
@@ -16,6 +18,7 @@ public class RoutineRunner : IRoutineRunner
 		if(runner == null)
 		{
 			var go = new GameObject("serviceRunner");
+			go.hideFlags = HideFlags.HideAndDontSave;
 			runner = go.AddComponent<RunnerMonobehaviour>();
 		}
 	}

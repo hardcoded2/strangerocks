@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace transfluent
 {
@@ -66,7 +65,7 @@ namespace transfluent
 		public WebServiceReturnStatus getStatusFromFinishedWWW(WWW www, Stopwatch sw,
 			ITransfluentParameters originalCallParams)
 		{
-			//Debug.Log("WWW:" + www.url);
+			UnityEngine.Debug.Log("WWW:" + www.url);
 
 			var status = new WebServiceReturnStatus
 			{

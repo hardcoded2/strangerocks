@@ -53,6 +53,7 @@ namespace transfluent.editor
 		}
 
 		private bool showAllLanugages;
+
 		public bool showCurrentLanguage()
 		{
 			var languageList = _mediator.getLanguageList();
@@ -66,7 +67,7 @@ namespace transfluent.editor
 			int currentLanguageIndex = -1;
 			if(currentLanguage != null)
 				currentLanguageIndex = languageNames.IndexOf(currentLanguage.name);
-			
+
 			int newLanguageIndex = EditorGUILayout.Popup("Current language", currentLanguageIndex, languageNames.ToArray());
 			if(currentLanguageIndex != newLanguageIndex)
 			{
@@ -99,6 +100,13 @@ namespace transfluent.editor
 			public void doGUI()
 			{
 				EditorGUILayout.BeginHorizontal();
+				if(GUILayout.Button("<color=blue>Don't have an account? In-editor translations done by professional translators!</color>", new GUIStyle() { richText = true }))
+				{
+					Application.OpenURL("https://www.transfluent.com/register/");
+				}
+				EditorGUILayout.EndHorizontal();
+
+				EditorGUILayout.BeginHorizontal();
 				currentUsername = EditorGUILayout.TextField("username", currentUsername);
 				currentPassword = EditorGUILayout.PasswordField("password", currentPassword);
 				EditorGUILayout.EndHorizontal();
@@ -113,7 +121,7 @@ namespace transfluent.editor
 					if(_mediator.doAuth(currentUsername, currentPassword))
 					{
 						_mediator.setUsernamePassword(currentUsername, currentPassword);
-					}
+					}	
 				}
 				EditorGUILayout.EndHorizontal();
 			}

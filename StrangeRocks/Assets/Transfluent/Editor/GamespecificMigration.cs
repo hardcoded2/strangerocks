@@ -1,13 +1,17 @@
 ﻿#define TRANSFLUENT_EXAMPLE
-using System;
+
 #if TRANSFLUENT_EXAMPLE
 using strange.examples.strangerocks;
 #endif //!TRANSFLUENT_EXAMPLE
+
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+
 #if UNITY_EDITOR
+
 using UnityEditor;
+
 #endif
 
 namespace transfluent
@@ -38,10 +42,8 @@ namespace transfluent
 					//custom script objects have to manually declare themselves as "dirty"
 					EditorUtility.SetDirty(button);
 				}
-			}
 #endif
 			}
-
 
 			public static void setKeyInDefaultLanguageDB(string key, string value, string groupid = "")
 			{
@@ -68,7 +70,6 @@ namespace transfluent
 				Debug.Log(TranslationUtility.get("Start Game"));
 			}
 
-
 			[MenuItem("Translation/Helpers/Full migration")]
 			public static void UpdateReferences()
 			{
@@ -78,21 +79,21 @@ namespace transfluent
 				scanner.searchPrefabs();
 			}
 
-
 			public static List<GameObject> getAllPrefabReferences()
 			{
 				var retList = new List<GameObject>();
 				string[] aMaterialFiles = Directory.GetFiles(Application.dataPath, "*.prefab", SearchOption.AllDirectories);
-				foreach (string matFile in aMaterialFiles)
+				foreach(string matFile in aMaterialFiles)
 				{
 					string assetPath = "Assets" + matFile.Replace(Application.dataPath, "").Replace('\\', '/');
-					var go = (GameObject) AssetDatabase.LoadAssetAtPath(assetPath, typeof (GameObject));
+					var go = (GameObject)AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject));
 
 					retList.Add(go);
 				}
 				return retList;
 			}
 		}
+	}
 
 	public class CustomScriptProcessorState
 	{
@@ -168,6 +169,37 @@ namespace transfluent
 			translatable.localizableText.globalizationKey = textMesh.text;
 			//For textmesh specificially, this setDirty is not needed according to http://docs.unity3d.com/Documentation/ScriptReference/EditorUtility.SetDirty.html
 			//EditorUtility.SetDirty(textMesh);
+		}
+	}
+
+	public class GUITextProcessor : IGameProcessor
+	{
+		public void process(GameObject go, CustomScriptProcessorState processorState)
+		{
+			var guiText = go.GetComponent<GUIText>();
+			if(guiText == null) return;
+
+			string newKey = guiText.text;
+			processorState.addToDB(newKey, newKey);
+			processorState.addToBlacklist(go);
+
+			var translatable = guiText.GetComponent<LocalizedGUIText>();
+			if(processorState.shouldIgnoreString(guiText.text))
+			{
+				processorState.addToBlacklist(go);
+				return;
+			}
+
+			if(translatable == null)
+			{
+				translatable = guiText.gameObject.AddComponent<LocalizedGUIText>();
+				translatable.guiTextToModify = guiText; //just use whatever the source text is upfront, and allow the user to
+			}
+
+			translatable.localizableText.globalizationKey = guiText.text;
+			//For guitext and other unity managed objects, this setDirty is not needed according to http://docs.unity3d.com/Documentation/ScriptReference/EditorUtility.SetDirty.html
+			EditorUtility.SetDirty(guiText.gameObject);
+			EditorUtility.SetDirty(guiText);
 		}
 	}
 }
