@@ -59,7 +59,7 @@ namespace strange.examples.strangerocks.game
 			missileGO.SetActive (true);
 
 			//Send it out
-			missileGO.rigidbody.AddRelativeForce(Vector3.right * 1000f);
+			missileGO.GetComponent<Rigidbody>().AddRelativeForce(Vector3.right * 1000f);
 		}
 	}
 }

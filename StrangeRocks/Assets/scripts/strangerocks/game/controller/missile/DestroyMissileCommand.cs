@@ -39,7 +39,7 @@ namespace strange.examples.strangerocks.game
 		{
 			//We're pooling instances, not actually destroying them,
 			//So reset the instances to an appropriate state for reuse...
-			missileView.rigidbody.velocity = Vector3.zero;
+			missileView.GetComponent<Rigidbody>().velocity = Vector3.zero;
 			//...and store them offscreen
 			missileView.transform.localPosition = PARKED_POS;
 

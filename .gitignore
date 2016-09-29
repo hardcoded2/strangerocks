@@ -3,3 +3,5 @@ StrangeRocks/Library/metadata
 StrangeRocks/Library
 StrangeRocks/Temp
 StrangeRocks/obj
+StrangeRocks/*.csproj
+StrangeRocks/*.sln

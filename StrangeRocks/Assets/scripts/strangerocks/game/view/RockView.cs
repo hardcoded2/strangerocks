@@ -29,7 +29,7 @@ namespace strange.examples.strangerocks.game
 		void FixedUpdate()
 		{
 			//Some spin for visual fun
-			rigidbody.AddRelativeTorque (Vector3.up * rotationSpeed);
+			GetComponent<Rigidbody>().AddRelativeTorque (Vector3.up * rotationSpeed);
 
 			if (!!screenUtil.IsInCamera(mainRenderer.gameObject))
 			{

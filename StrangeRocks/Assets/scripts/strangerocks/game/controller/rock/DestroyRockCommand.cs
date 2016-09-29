@@ -91,8 +91,8 @@ namespace strange.examples.strangerocks.game
 
 			//We're pooling instances, not actually destroying them,
 			//So reset the instances to an appropriate state for reuse...
-			rockView.rigidbody.velocity = Vector3.zero;
-			rockView.rigidbody.angularVelocity = Vector3.zero;
+			rockView.GetComponent<Rigidbody>().velocity = Vector3.zero;
+			rockView.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 			rockView.gameObject.SetActive (false);
 
 			//...and store them offscreen

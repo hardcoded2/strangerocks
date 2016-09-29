@@ -30,7 +30,7 @@ namespace strange.examples.strangerocks.game
 			//We're pooling instances, not actually destroying them,
 			//So reset the instances to an appropriate state for reuse...
 			view.resetAnimation ();
-			rigidbody.velocity = Vector3.zero;
+			GetComponent<Rigidbody>().velocity = Vector3.zero;
 			//...and store them offscreen
 			transform.localPosition = new Vector3 (1000f,0f,1000f);
 			gameObject.SetActive (false);

@@ -55,7 +55,7 @@ namespace strange.examples.strangerocks.game
 			RockView rockView = contact.GetComponent<RockView> ();
 			if (rockView != null)
 			{
-				explosionGO.rigidbody.velocity = rockView.rigidbody.velocity;
+				explosionGO.GetComponent<Rigidbody>().velocity = rockView.GetComponent<Rigidbody>().velocity;
 				destroyRockSignal.Dispatch (rockView, true);
 			}
 
@@ -63,7 +63,7 @@ namespace strange.examples.strangerocks.game
 			EnemyView enemyView = contact.GetComponent<EnemyView> ();
 			if (enemyView != null)
 			{
-				explosionGO.rigidbody.velocity = enemyView.rigidbody.velocity;
+				explosionGO.GetComponent<Rigidbody>().velocity = enemyView.GetComponent<Rigidbody>().velocity;
 				destroyEnemySignal.Dispatch (enemyView, true);
 			}
 

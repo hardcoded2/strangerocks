@@ -65,7 +65,7 @@ namespace strange.examples.strangerocks.game
 				GameObject explosionGO = GameObject.Instantiate (explosionPrototype) as GameObject;
 				Vector3 pos = shipView.transform.localPosition;
 				explosionGO.transform.localPosition = pos;
-				explosionGO.rigidbody.velocity = shipView.rigidbody.velocity;
+				explosionGO.GetComponent<Rigidbody>().velocity = shipView.GetComponent<Rigidbody>().velocity;
 				explosionGO.transform.parent = shipView.transform.parent;
 
 

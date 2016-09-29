@@ -38,7 +38,7 @@ namespace strange.examples.strangerocks.game
 		//we know the Mediator is in place before doing anything important.
 		internal void Init()
 		{
-			rigidbody.centerOfMass = Vector3.zero;
+			GetComponent<Rigidbody>().centerOfMass = Vector3.zero;
 		}
 
 		//Set the IME value
@@ -56,17 +56,17 @@ namespace strange.examples.strangerocks.game
 
 			if (left)
 			{
-				rigidbody.AddRelativeTorque (Vector3.down * rotationSpeed);
+				GetComponent<Rigidbody>().AddRelativeTorque (Vector3.down * rotationSpeed);
 			}
 				
 			if (right)
 			{
-				rigidbody.AddRelativeTorque (Vector3.up * rotationSpeed);
+				GetComponent<Rigidbody>().AddRelativeTorque (Vector3.up * rotationSpeed);
 			}
 				
 			if (thrust)
 			{
-				rigidbody.AddRelativeForce (Vector3.right * thrustSpeed);
+				GetComponent<Rigidbody>().AddRelativeForce (Vector3.right * thrustSpeed);
 				thrustParticles.startLifetime = 1f;
 			} else
 			{

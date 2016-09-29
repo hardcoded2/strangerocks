@@ -94,7 +94,7 @@ namespace strange.examples.strangerocks.game
 				0f,
 				UnityEngine.Random.Range (minYSpeed, maxYSpeed)
 			);
-			rigidbody.AddRelativeForce (motiveForce);
+			GetComponent<Rigidbody>().AddRelativeForce (motiveForce);
 		}
 	}
 }

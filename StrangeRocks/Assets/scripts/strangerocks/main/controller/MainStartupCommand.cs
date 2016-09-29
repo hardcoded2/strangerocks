@@ -4,10 +4,10 @@
 //approach is that out Cross-Context bindings remain in place,
 //which makes better use of Strange's Cross-Context capabilities.
 
-using System;
 using UnityEngine;
 using strange.extensions.context.api;
 using strange.extensions.command.impl;
+using UnityEngine.SceneManagement;
 
 namespace strange.examples.strangerocks.main
 {
@@ -19,8 +19,8 @@ namespace strange.examples.strangerocks.main
 
 		override public void Execute ()
 		{
-			Application.LoadLevelAdditive ("ui");
-			Application.LoadLevelAdditive ("game");
+			SceneManager.LoadScene("ui",LoadSceneMode.Additive);
+			SceneManager.LoadScene("game", LoadSceneMode.Additive);
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace strange.examples.strangerocks.game
 			expPt.x *= (UnityEngine.Random.Range (0f, 1f) < .5f) ? -1f : 1f;
 			expPt.z += UnityEngine.Random.Range (2f, 4f);
 			expPt.z *= (UnityEngine.Random.Range (0f, 1f) < .5f) ? -1f : 1f;
-			rockGO.rigidbody.AddExplosionForce (
+			rockGO.GetComponent<Rigidbody>().AddExplosionForce (
 				UnityEngine.Random.Range (gameConfig.rockExplosiveForceMin, gameConfig.rockExplosiveForceMax), 
 				expPt,
 				gameConfig.rockExplosiveRadius);
